@@ -60,6 +60,7 @@ assert cookie.startswith('3x-ui=') and not two_factor
 assert portal.is_panel_admin(cookie.split(';',1)[0])
 account = portal.register('smoke-user', int(time.time() * 1000) + 86400000)
 assert account['panel_id'] >= 1 and portal.client('smoke-user')['email'] == 'smoke-user'
+portal.register('smoke-other', int(time.time() * 1000) + 86400000)
 assert 'vpn.example.com' in portal.subscription(account)
 assert 'DOMAIN-SUFFIX,example.com,DIRECT' in portal.subscription(account)
 PY
@@ -70,8 +71,12 @@ for attempt in {1..30}; do
   if curl -fsS --noproxy '*' http://127.0.0.1:17764/ >/dev/null 2>&1; then break; fi
   sleep 0.3
 done
-python3 - <<'PY'
-from urllib.request import urlopen
+python3 - "$testdir/secrets/admin-credentials" <<'PY'
+from pathlib import Path
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
+import json
+import sys
 import portal
 
 base = 'http://127.0.0.1:17764'
@@ -86,6 +91,29 @@ for path, marker in (
 ):
     with urlopen(base + path, timeout=6) as response:
         assert response.status == 200 and marker in response.read(), path.split('/')[1]
+password = Path(sys.argv[1]).read_text().split('password=', 1)[1].strip()
+cookie, _ = portal.panel_login(password, '', '127.0.0.1')
+headers = {'Cookie': cookie.split(';', 1)[0]}
+admin = base + '/admin/operations/'
+filter_query = '?filter_client=' + str(account['panel_id'])
+with urlopen(Request(admin + filter_query, headers=headers), timeout=6) as response:
+    page = response.read().decode()
+    assert '<option selected>smoke-user</option>' in page
+    assert '<td class="account-name">smoke-user</td>' in page
+    assert '<td class="account-name">smoke-other</td>' not in page
+    assert '<span>smoke-other</span>' in page
+with urlopen(Request(admin + 'accounts.json' + filter_query, headers=headers), timeout=6) as response:
+    payload = json.load(response)
+    assert payload['selected_name'] == 'smoke-user'
+    assert 'smoke-user' in payload['cards'] and 'smoke-other' not in payload['cards']
+    assert 'smoke-other' in payload['options']
+try:
+    urlopen(admin + 'accounts.json', timeout=6)
+except HTTPError as exc:
+    assert exc.code == 403
+else:
+    raise AssertionError('Unauthenticated accounts JSON was accessible')
+print('PASS account picker filtering and authenticated live refresh')
 PY
 ss -ltnH 'sport = :17763' | grep -F '127.0.0.1:17763'
 if command -v nginx >/dev/null && command -v openssl >/dev/null; then
