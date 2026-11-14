@@ -1,0 +1,11 @@
+[Unit]
+Description=Collect Cheapcoding client traffic once a minute
+
+[Timer]
+OnBootSec=15s
+OnUnitActiveSec=60s
+AccuracySec=1s
+Unit=clash-traffic.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.env
+.env
+panel-token
+admin-credentials
+*.key
+*.pem

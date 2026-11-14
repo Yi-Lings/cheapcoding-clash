@@ -1,0 +1,17 @@
+[Unit]
+Description=Sample 3x-ui client traffic for the Cheapcoding dashboard
+After=clash-panel.service
+
+[Service]
+EnvironmentFile=/etc/cheapcoding-clash/portal.env
+Type=oneshot
+User=clashportal
+Group=clashportal
+ExecStart=/usr/bin/python3 /opt/clash-subscription/portal.py collect-traffic
+TimeoutStartSec=35
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/clash-portal
+UMask=0077

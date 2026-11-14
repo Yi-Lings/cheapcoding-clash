@@ -1,0 +1,97 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name @@HOST@@;
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/clash-acme;
+        try_files $uri =404;
+    }
+    location / { return 301 https://@@HOST@@$request_uri; }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name @@HOST@@;
+    ssl_certificate @@CERT@@;
+    ssl_certificate_key @@KEY@@;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    server_tokens off;
+    access_log off;
+    error_log /dev/null crit;
+    client_max_body_size 2k;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+
+    location = /connect {
+        proxy_pass http://127.0.0.1:17763/vpn/connect;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_buffering off;
+    }
+
+
+    location = /admin { return 301 /admin/; }
+
+    location ~ ^/admin/operations/(?:$|live\.js$|accounts\.json$|traffic$|create$|vouchers$) {
+        client_max_body_size 16k;
+        proxy_pass http://127.0.0.1:17764;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_read_timeout 35s;
+    }
+
+    location = /login {
+        limit_req zone=ccvpn_auth burst=7 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:17764;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location = /password {
+        limit_req zone=ccvpn_auth burst=7 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:17764;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+    location ^~ /account/ {
+        limit_req zone=ccvpn_auth burst=7 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:17764;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+    location /admin/ {
+        client_max_body_size 2m;
+        proxy_pass http://127.0.0.1:17761;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header Authorization "";
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $ccvpn_admin_upgrade;
+        proxy_cookie_flags 3x-ui secure httponly samesite=lax;
+        proxy_read_timeout 75s;
+        proxy_buffering off;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:17764;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_connect_timeout 3s;
+        proxy_read_timeout 20s;
+    }
+}

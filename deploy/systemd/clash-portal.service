@@ -1,0 +1,20 @@
+[Unit]
+Description=CheapCoding VPN customer and voucher portal
+After=clash-panel.service
+Requires=clash-panel.service
+
+[Service]
+EnvironmentFile=/etc/cheapcoding-clash/portal.env
+User=clashportal
+Group=clashportal
+ExecStart=/usr/bin/python3 /opt/clash-subscription/portal.py serve
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/clash-portal
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

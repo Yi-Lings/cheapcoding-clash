@@ -1,0 +1,22 @@
+[Unit]
+Description=Clash subscription panel and Xray
+After=network.target
+
+[Service]
+User=clashsvc
+Group=clashsvc
+WorkingDirectory=/var/lib/clash-panel
+Environment=XUI_DB_FOLDER=/var/lib/clash-panel/db
+Environment=XUI_BIN_FOLDER=/var/lib/clash-panel/bin
+Environment=XUI_LOG_FOLDER=/var/lib/clash-panel/log
+ExecStart=/opt/clash-subscription/x-ui/x-ui
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/clash-panel
+ProtectHome=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
