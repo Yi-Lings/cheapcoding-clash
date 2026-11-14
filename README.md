@@ -94,6 +94,18 @@ rm -rf -- "$restore"
 
 4. 验证首页、管理员登录、用户订阅刷新和真实代理请求，再切换 DNS。新机初始化时生成的管理员密码在恢复旧数据库后失效，登录使用旧面板凭据。切换确认后再退役旧机。恢复的数据库、token 和备份包只在私有渠道传递。
 
+## 品牌素材
+
+原始 PNG 放在 `assets/brand/`，保留生成时的分辨率和透明通道。
+
+| 文件 | 尺寸 | 用途 |
+|---|---|---|
+| [cheapcoding-vpn.png](assets/brand/cheapcoding-vpn.png) | 1254 × 1254 | 蓝色 C 形标志 |
+| [cheapcoding-vpn-ocean.png](assets/brand/cheapcoding-vpn-ocean.png) | 1254 × 1254 | 星海 C 形标志备选 |
+| [cheapcoding-starry-sea.png](assets/brand/cheapcoding-starry-sea.png) | 1536 × 1024 | 星海宣传页背景 |
+
+面板部署使用 `portal/` 下的压缩版 WebP。品牌 PNG 作为设计原稿随源码提供。
+
 ## 源码与许可
 
 `portal/` 是订阅面板和静态素材。 `deploy/` 是部署、初始化、备份、Nginx 与 systemd 配置。3x-ui/Xray 通过固定的官方发行包安装，上游代码与许可证由上游仓库维护。本仓库的部署代码采用 GPL-3.0。
