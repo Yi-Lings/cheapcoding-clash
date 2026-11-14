@@ -98,5 +98,6 @@ rm -rf -- "$restore"
 
 `portal/` 是订阅面板和静态素材。 `deploy/` 是部署、初始化、备份、Nginx 与 systemd 配置。3x-ui/Xray 通过固定的官方发行包安装，上游代码与许可证由上游仓库维护。本仓库的部署代码采用 GPL-3.0。
 
+- [Yi-Lings 的 3x-ui fork](https://github.com/Yi-Lings/3x-ui)
 - [3x-ui 上游](https://github.com/MHSanaei/3x-ui)
 - [3x-ui v3.11.0 发行版](https://github.com/MHSanaei/3x-ui/releases/tag/v3.11.0)
