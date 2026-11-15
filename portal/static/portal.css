@@ -21,7 +21,13 @@
   line-height: 1.55;
 }
 
-body { margin: 0; min-block-size: 100vh; color: var(--ink); background: var(--page); }
+body {
+  margin: 0;
+  min-block-size: 100vh;
+  color: var(--ink);
+  background: var(--page);
+  -webkit-tap-highlight-color: transparent;
+}
 :where(*, *::before, *::after) { box-sizing: border-box; }
 :where(h1, h2, h3, p, dl) { margin: 0; }
 [hidden] { display: none !important; }
