@@ -64,8 +64,11 @@ label { display: block; font-size: .875rem; font-weight: 650; margin-block-end: 
 input, select { display: block; inline-size: 100%; min-inline-size: 0; min-block-size: var(--control-size); margin-block-start: .3rem; padding: .55rem .7rem; color: var(--ink); background: var(--control); border: 1px solid #496381; border-radius: .55rem; }
 input[readonly] { font: .825rem ui-monospace, monospace; }
 input.inline { display: inline; inline-size: auto; min-block-size: 0; margin: 0 .3rem 0 0; accent-color: var(--accent); }
-button, .landing-connect { min-block-size: var(--control-size); padding: .55rem .9rem; background: var(--accent); color: var(--on-accent); border: 1px solid transparent; border-radius: .55rem; font-weight: 700; cursor: pointer; }
-button:hover, .landing-connect:hover { background: var(--accent-hover); color: var(--on-accent); }
+button, .button-link { min-block-size: var(--control-size); padding: .55rem .9rem; background: var(--accent); color: var(--on-accent); border: 1px solid transparent; border-radius: .55rem; font-weight: 700; cursor: pointer; }
+button:hover, .button-link:hover { background: var(--accent-hover); color: var(--on-accent); }
+.button-link { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; text-decoration: none; }
+.button-link-secondary { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.button-link-secondary:hover { background: var(--soft); color: var(--ink); }
 button.secondary, button.danger { background: var(--control); color: var(--accent); border-color: #496381; }
 button.secondary:hover { background: var(--soft); }
 button.danger { color: var(--danger); border-color: #875165; }
@@ -80,20 +83,61 @@ button.danger:hover { background: #482537; }
 .range-warning { color: #ffddad; background: #372920; border-color: #795439; }
 .status { display: inline-flex; padding: .22rem .65rem; border-radius: 99rem; background: #153a3b; color: #9ff1df; font-size: .825rem; font-weight: 700; }
 .status.inactive { background: #372920; color: #ffddad; }
-.hero-row { display: flex; gap: .65rem; align-items: start; justify-content: space-between; flex-wrap: wrap; }
 .panel-form, .client-editor { max-inline-size: 50rem; }
 .panel-form + .panel-form, .client-editor .surface + .surface { margin-block-start: var(--gap); }
 
-.landing-hero { min-block-size: clamp(30rem, 72svh, 49rem); display: grid; align-items: center; background: linear-gradient(90deg, #070f20ed, #070f2070 46%, transparent 78%), linear-gradient(0deg, var(--page), transparent 30%), var(--sea-art) center 56% / cover no-repeat; }
-.landing-hero-inner, .landing-features { inline-size: min(var(--measure), 100%); padding-inline: var(--gutter); margin-inline: auto; }
-.landing-hero-inner { padding-block: clamp(3rem, 10vh, 6rem); }
-.landing-hero h1 { font-size: clamp(3rem, 2rem + 5vw, 6.5rem); line-height: 1.06; max-inline-size: 9em; text-wrap: balance; }
-.landing-hero h1 span { display: block; color: var(--accent); }
-.landing-hero p { max-inline-size: 28em; color: var(--muted); font-size: clamp(1rem, .9rem + .45vw, 1.25rem); margin-block: 1rem 1.5rem; text-wrap: pretty; }
-.landing-connect { display: inline-flex; gap: .9rem; align-items: center; text-decoration: none; }
-.landing-features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); padding-block-end: 2rem; }
-.landing-feature { padding: 1rem; border-block-start: 1px solid var(--line); }
-.landing-feature p { margin-block-start: .35rem; font-size: .9rem; color: var(--muted); }
+.landing-page {
+  color-scheme: light;
+  --page: #f5f7f4;
+  --surface: #fff;
+  --soft: #e5efe9;
+  --line: #c5d5ce;
+  --ink: #102b27;
+  --muted: #475e58;
+  --accent: #12604f;
+  --accent-hover: #0c493d;
+  --on-accent: #fff;
+}
+.landing-main {
+  inline-size: min(var(--measure), 100%);
+  padding: clamp(1.5rem, 5vw, 4.5rem) var(--gutter) clamp(2rem, 7vw, 6rem);
+  margin-inline: auto;
+}
+.landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  gap: clamp(1.5rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.landing-hero h1 { font-size: clamp(2.35rem, 1.55rem + 4vw, 5.5rem); line-height: 1.04; }
+.landing-hero p, .landing-setup p { color: var(--muted); }
+.landing-hero p { max-inline-size: 28em; font-size: 1.0625rem; margin-block: 1.25rem 1.65rem; }
+.landing-nav-guide { min-block-size: var(--control-size); display: inline-flex; align-items: center; }
+.landing-art {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 80% center;
+  border-radius: 1.3rem;
+  background: #0b1430;
+}
+.landing-setup {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: clamp(1.4rem, 4vw, 3.4rem);
+  margin-block-start: clamp(2.5rem, 7vw, 5.5rem);
+  padding-block-start: clamp(1.6rem, 4vw, 3rem);
+  border-block-start: 1px solid var(--line);
+}
+.landing-setup h2 { font-size: clamp(1.4rem, 1.1rem + 1.5vw, 1.95rem); }
+.landing-setup h2 + p { margin-block-start: .75rem; }
+.landing-steps { margin: 0; padding-inline-start: 1.75rem; }
+.landing-steps li { padding: .75rem .35rem; border-block-end: 1px solid var(--line); }
+.landing-steps li:first-child { padding-block-start: 0; }
+.landing-steps li::marker { color: var(--accent); font-weight: 750; }
+.landing-steps p { margin-block-start: .2rem; font-size: .92rem; }
 
 .portal-shell { --rail: 14.5rem; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); min-block-size: 100vh; }
 .portal-sidebar { position: sticky; inset-block-start: 0; block-size: 100vh; block-size: 100dvh; align-self: start; overflow: auto; background: var(--control); border-inline-end: 1px solid var(--line); padding: 1.2rem .85rem; }
@@ -111,6 +155,26 @@ button.danger:hover { background: #482537; }
 .portal-top .actions { min-inline-size: 0; overflow-wrap: anywhere; }
 .portal-top .actions form { margin: 0; }
 .portal-content { container: panel / inline-size; inline-size: min(100%, var(--measure)); margin-inline: auto; padding: var(--gutter); }
+.overview-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .7rem 1rem; }
+.overview-heading h2 { margin: 0; font-size: clamp(1.25rem, 1.06rem + .8vw, 1.6rem); }
+.traffic-overview, .subscription-overview {
+  background: radial-gradient(ellipse at top right, #174659, transparent 75%), var(--surface);
+  border-color: #38617a;
+}
+.traffic-overview { margin-block-end: var(--gap); }
+.traffic-overview > .overview-heading { margin-block-end: 1.15rem; }
+.traffic-overview .traffic-metrics { margin: 0; }
+.subscription-layout { display: grid; gap: var(--gap); }
+.subscription-facts { display: grid; gap: .9rem; margin-block: 1.1rem; }
+.subscription-facts > div + div { border-block-start: 1px solid var(--line); padding-block-start: .9rem; }
+.subscription-facts dt { font-size: .875rem; color: var(--muted); }
+.subscription-facts dd { margin: .15rem 0 0; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.subscription-facts meter { display: block; inline-size: 100%; block-size: 1rem; margin-block-start: .35rem; }
+.subscription-connection p { color: var(--muted); margin-block-end: 1rem; }
+.subscription-connection > a { display: inline-block; margin-block-start: .8rem; }
+@container panel (inline-size >= 46rem) {
+  .subscription-layout { grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr); }
+}
 .portal-menu-open { display: none; }
 .portal-drawer {
   display: none; position: fixed; inset: 0 auto 0 0; margin: 0;
@@ -206,10 +270,9 @@ button.danger:hover { background: #482537; }
 @media (max-width: 42rem) {
   .auth-page .page-content { justify-items: center; }
   .auth-page { background-image: linear-gradient(#070f2065, #070f20ee), var(--sea-art); }
-  .landing-hero { align-items: start; background-position: 70% 50%; }
-  .landing-hero-inner { padding-block-end: 8rem; }
-  .landing-features { grid-template-columns: 1fr; gap: 0; }
-  .landing-feature { padding-inline: 0; }
+  .landing-hero, .landing-setup { grid-template-columns: minmax(0, 1fr); }
+  .landing-art { aspect-ratio: 2 / 1; }
+  .landing-page .site-bar .landing-nav-guide { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .portal-drawer, .portal-drawer[open], .portal-drawer::backdrop { animation: none; transition: none; }

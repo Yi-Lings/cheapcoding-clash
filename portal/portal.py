@@ -528,22 +528,30 @@ def cookie_header(token='', lifetime=0):
 
 
 def landing_page():
-    features = (
-        ('多端连接', '支持 Android、iOS、Windows、macOS 和 Linux。'),
-        ('规则分流', '国内流量、局域网及本站域名直连，其余流量走代理。'),
-        ('订阅自助管理', '查看用量、到期时间和订阅链接，也可自助续期。'),
+    steps = (
+        ('登录账号', '首次使用时，先通过专属激活链接设置密码。'),
+        ('复制订阅链接', '登录后进入「我的订阅」，复制完整的 Clash 订阅链接。'),
+        ('导入客户端', '将链接导入兼容客户端，选中订阅并连接。'),
     )
-    cards = ''.join(f'<article class="landing-feature"><h2>{heading}</h2><p>{detail}</p></article>'
-                    for heading, detail in features)
+    items = ''.join(f'<li><h3>{heading}</h3><p>{detail}</p></li>' for heading, detail in steps)
     metadata = '<meta name="description" content="Cheapcoding VPN 支持多端连接、规则分流和自助订阅管理。">'
     return (page_head('Cheapcoding VPN', metadata) + '<body class="landing-page">' + SKIP_LINK +
             '<header class="site-header"><div class="site-bar">'
-            '<a class="brand" href="/">' + BRAND_IMAGE_TAG + 'Cheapcoding VPN</a></div></header>'
-            '<main id="main-content" tabindex="-1"><section class="landing-hero" aria-labelledby="landing-title">'
-            '<div class="landing-hero-inner"><h1 id="landing-title">连接<span>更远的世界</span></h1>'
-            '<p>在常用设备上导入订阅，按规则连接。用量与订阅状态，登录即可查看。</p>'
-            '<a class="landing-connect" href="/login">去连接<span aria-hidden="true">↗</span></a>'
-            '</div></section><section class="landing-features" aria-label="服务功能">' + cards +
+            '<a class="brand" href="/">' + BRAND_IMAGE_TAG + 'Cheapcoding VPN</a>'
+            '<nav aria-label="页面导航"><a class="landing-nav-guide" href="#getting-started">使用方法</a>'
+            '<a class="button-link button-link-secondary" href="/login">登录</a></nav></div></header>'
+            '<main class="landing-main" id="main-content" tabindex="-1">'
+            '<section class="landing-hero" aria-labelledby="landing-title">'
+            '<div class="landing-hero-inner"><h1 id="landing-title">管理你的<br>Clash 订阅</h1>'
+            '<p>本站只提供 Clash 订阅链接。支持导入 Clash 订阅且兼容本站节点协议的开源客户端均可使用。</p>'
+            '<div class="actions"><a class="button-link" href="/login">进入订阅面板<span aria-hidden="true"> →</span></a>'
+            '<a class="landing-nav-guide" href="#getting-started">查看使用方法</a></div></div>'
+            f'<img class="landing-art" src="/starry-sea.webp?v={SEA_ART_VERSION}" '
+            'width="1536" height="1024" alt="" fetchpriority="high"></section>'
+            '<section class="landing-setup" id="getting-started" aria-labelledby="setup-title">'
+            '<div><h2 id="setup-title">如何开始使用</h2>'
+            '<p>首次安装推荐 Hiddify，它支持 Android、iOS、Windows、macOS 和 Linux。客户端下载和分流配置见面板内的「使用教程」。</p></div>'
+            '<ol class="landing-steps">' + items + '</ol>' +
             '</section></main></body></html>')
 
 
@@ -878,7 +886,12 @@ def traffic_dashboard(query, username='', panel_id=None, admin=False):
         caption += f' · 从 {start_text} 开始采集 · 最近更新 {end_text}'
     if start is None:
         caption += ' · 等待首次采集'
-    body = filters + '<dl class="metric-grid traffic-metrics">' + metrics + '</dl>'
+    shortcuts = ('' if admin else
+                 '<div class="actions"><a class="button-link" href="/subscription">我的订阅<span aria-hidden="true"> →</span></a>'
+                 '<a class="button-link button-link-secondary" href="/guide">使用教程</a></div>')
+    body = ('<section class="surface traffic-overview" aria-labelledby="traffic-overview-title">'
+            '<div class="overview-heading"><h2 id="traffic-overview-title">流量概览</h2>' + shortcuts +
+            '</div>' + filters + '<dl class="metric-grid traffic-metrics">' + metrics + '</dl></section>')
     body += '<section class="surface traffic-card"><h2>每日上下行</h2><p class="traffic-caption">' + caption + '</p>'
     body += ('<div class="traffic-legend"><span><i class="traffic-key"></i>上传</span>'
              '<span><i class="traffic-key down"></i>下载</span></div>' + traffic_bars(rows) + '</section>')
@@ -938,10 +951,21 @@ def user_page(section, name, account=None, current=None, message=''):
         traffic = current.get('traffic') or {}
         status, state_class = client_status(current, traffic)
         total = int(traffic.get('up') or 0) + int(traffic.get('down') or 0)
-        quota = readable_traffic(current['totalGB']) if current['totalGB'] else '不限额'
-        content = ('<div class="hero-row"><h2>Clash 订阅</h2><span class="' + state_class + '">' + status + '</span></div>'
-                   '<p>到期时间 ' + expiration(current) + '</p><p>累计使用 ' + readable_traffic(total) + ' / ' + quota + '</p>' +
-                   copy_field('订阅链接', HOME + '/sub/' + account['subscription'], 'subscription-url'))
+        limit = current['totalGB']
+        quota = readable_traffic(limit) if limit else '不限额'
+        meter = (f'<meter min="0" max="{limit}" value="{min(total, limit)}" aria-label="已用流量占额度比例"></meter>'
+                 if limit else '')
+        overview = ('<section class="surface subscription-overview"><div class="overview-heading">'
+                    '<h2>订阅概览</h2><span class="' + state_class + '">' + status + '</span></div>'
+                    '<dl class="subscription-facts"><div><dt>到期时间</dt><dd>' + expiration(current) + '</dd></div>'
+                    '<div><dt>累计使用</dt><dd>' + readable_traffic(total) + ' / ' + quota + '</dd>' + meter +
+                    '</div></dl><a class="button-link button-link-secondary" href="/redeem">兑换续期</a></section>')
+        connection = ('<section class="surface subscription-connection"><h2>导入客户端</h2>'
+                      '<p>复制下方链接，粘贴到客户端的订阅地址栏。</p>' +
+                      copy_field('订阅链接', HOME + '/sub/' + account['subscription'], 'subscription-url') +
+                      '<a href="/guide">查看客户端下载和配置教程<span aria-hidden="true"> →</span></a></section>')
+        return portal_app(USER_PAGES[section][0], notice(message) + '<div class="subscription-layout">' +
+                          overview + connection + '</div>', section, username=name)
     elif section == 'guide':
         guide = CLIENT_GUIDE.replace('class="client-guide surface">', 'class="client-guide surface" open>', 1)
         guide = guide.replace('从本页上方复制「Clash 订阅链接」', '前往<a href="/subscription">我的订阅</a>复制链接')
