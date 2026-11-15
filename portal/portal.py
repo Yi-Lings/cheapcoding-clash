@@ -78,9 +78,11 @@ ADMIN_LIVE_SCRIPT = (STATIC / 'admin-live.js').read_text(encoding='utf-8')
 FRONTEND_ASSETS = {
     '/portal.css': (PORTAL_STYLE, 'text/css; charset=utf-8'),
     '/portal.js': (PORTAL_SCRIPT, 'application/javascript; charset=utf-8'),
+    '/mountain-pass.webp': ((STATIC / 'mountain-pass.webp').read_bytes(), 'image/webp'),
+    '/mountain-pass-mobile.webp': ((STATIC / 'mountain-pass-mobile.webp').read_bytes(), 'image/webp'),
 }
 FRONTEND_VERSIONS = {
-    url: hashlib.sha256(body.encode()).hexdigest()[:16]
+    url: hashlib.sha256(body.encode() if isinstance(body, str) else body).hexdigest()[:16]
     for url, (body, _) in FRONTEND_ASSETS.items()
 }
 PORTAL_STYLE_TAG = f'<link rel="stylesheet" href="/portal.css?v={FRONTEND_VERSIONS["/portal.css"]}">'
@@ -534,6 +536,8 @@ def landing_page():
         ('导入客户端', '将链接导入兼容客户端，选中订阅并连接。'),
     )
     items = ''.join(f'<li><h3>{heading}</h3><p>{detail}</p></li>' for heading, detail in steps)
+    desktop_art = '/mountain-pass.webp?v=' + FRONTEND_VERSIONS['/mountain-pass.webp']
+    mobile_art = '/mountain-pass-mobile.webp?v=' + FRONTEND_VERSIONS['/mountain-pass-mobile.webp']
     metadata = '<meta name="description" content="Cheapcoding VPN 支持多端连接、规则分流和自助订阅管理。">'
     return (page_head('Cheapcoding VPN', metadata) + '<body class="landing-page">' + SKIP_LINK +
             '<header class="site-header"><div class="site-bar">'
@@ -542,12 +546,14 @@ def landing_page():
             '<a class="button-link button-link-secondary" href="/login">登录</a></nav></div></header>'
             '<main class="landing-main" id="main-content" tabindex="-1">'
             '<section class="landing-hero" aria-labelledby="landing-title">'
-            '<div class="landing-hero-inner"><h1 id="landing-title">管理你的<br>Clash 订阅</h1>'
+            '<div class="landing-hero-inner"><h1 id="landing-title">你的 Clash 订阅</h1>'
             '<p>本站只提供 Clash 订阅链接。支持导入 Clash 订阅且兼容本站节点协议的开源客户端均可使用。</p>'
             '<div class="actions"><a class="button-link" href="/login">进入订阅面板<span aria-hidden="true"> →</span></a>'
             '<a class="landing-nav-guide" href="#getting-started">查看使用方法</a></div></div>'
-            f'<img class="landing-art" src="/starry-sea.webp?v={SEA_ART_VERSION}" '
-            'width="1536" height="1024" alt="" fetchpriority="high"></section>'
+            '<picture class="landing-art">'
+            f'<source media="(max-width: 42rem)" srcset="{mobile_art}" width="690" height="960">'
+            f'<img src="{desktop_art}" width="1536" height="1024" alt="" fetchpriority="high">'
+            '</picture></section>'
             '<section class="landing-setup" id="getting-started" aria-labelledby="setup-title">'
             '<div><h2 id="setup-title">如何开始使用</h2>'
             '<p>首次安装推荐 Hiddify，它支持 Android、iOS、Windows、macOS 和 Linux。客户端下载和分流配置见面板内的「使用教程」。</p></div>'

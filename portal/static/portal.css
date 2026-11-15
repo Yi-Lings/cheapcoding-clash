@@ -95,7 +95,7 @@ button.danger:hover { background: #482537; }
 .landing-hero {
   position: relative;
   isolation: isolate;
-  min-block-size: clamp(30rem, 66svh, 46rem);
+  min-block-size: clamp(31rem, 68svh, 48rem);
   display: grid;
   align-items: center;
   background: var(--page);
@@ -105,8 +105,8 @@ button.danger:hover { background: #482537; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, #070f20f2, #070f20db 55%, transparent 88%),
-              linear-gradient(0deg, var(--page), transparent 28%);
+  background: linear-gradient(90deg, #070f20d9, #070f2066 49%, transparent 75%),
+              linear-gradient(0deg, var(--page), transparent 25%);
 }
 .landing-hero-inner, .landing-setup {
   inline-size: min(var(--measure), 100%);
@@ -117,7 +117,7 @@ button.danger:hover { background: #482537; }
   padding-block: clamp(2.75rem, 8svh, 5rem);
   padding-inline-end: max(var(--gutter), 45%);
 }
-.landing-hero h1 { font-size: clamp(2.35rem, 1.55rem + 4vw, 5.5rem); line-height: 1.04; }
+.landing-hero h1 { font-size: clamp(2.5rem, 1.45rem + 3.65vw, 5.5rem); line-height: 1.08; text-wrap: balance; }
 .landing-hero p, .landing-setup p { color: var(--muted); }
 .landing-hero p { max-inline-size: 28em; font-size: 1.0625rem; margin-block: 1.25rem 1.65rem; }
 .landing-nav-guide { min-block-size: var(--control-size); display: inline-flex; align-items: center; }
@@ -125,26 +125,37 @@ button.danger:hover { background: #482537; }
   position: absolute;
   inset: 0;
   z-index: -2;
+}
+.landing-art img {
   display: block;
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
-  object-position: center 56%;
+  object-position: center 61%;
 }
 .landing-setup {
-  display: grid;
-  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
-  gap: clamp(1.4rem, 4vw, 3.4rem);
   padding-block: clamp(1.6rem, 4vw, 3rem) clamp(2rem, 7vw, 6rem);
-  border-block-start: 1px solid var(--line);
 }
 .landing-setup h2 { font-size: clamp(1.4rem, 1.1rem + 1.5vw, 1.95rem); }
-.landing-setup h2 + p { margin-block-start: .75rem; }
-.landing-steps { margin: 0; padding-inline-start: 1.75rem; }
-.landing-steps li { padding: .75rem .35rem; border-block-end: 1px solid var(--line); }
-.landing-steps li:first-child { padding-block-start: 0; }
+.landing-setup h2 + p { margin-block-start: .5rem; max-inline-size: 47em; }
+.landing-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--gap);
+  margin: 1.4rem 0 0;
+  padding-inline-start: 0;
+}
+.landing-steps li {
+  padding: 1.05rem 1.15rem 1.05rem 2.55rem;
+  list-style-position: inside;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-indent: -1.4rem;
+}
 .landing-steps li::marker { color: var(--accent); font-weight: 750; }
-.landing-steps p { margin-block-start: .2rem; font-size: .92rem; }
+.landing-steps h3 { display: inline; }
+.landing-steps p { margin-block-start: .3rem; font-size: .92rem; text-indent: 0; }
 
 .portal-shell { --rail: 14.5rem; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); min-block-size: 100vh; }
 .portal-sidebar { position: sticky; inset-block-start: 0; block-size: 100vh; block-size: 100dvh; align-self: start; overflow: auto; background: var(--control); border-inline-end: 1px solid var(--line); padding: 1.2rem .85rem; }
@@ -278,13 +289,12 @@ button.danger:hover { background: #482537; }
   .auth-page .page-content { justify-items: center; }
   .auth-page { background-image: linear-gradient(#070f2065, #070f20ee), var(--sea-art); }
   .landing-hero { align-items: start; }
-  .landing-hero-inner { padding-inline-end: var(--gutter); padding-block-end: 10rem; }
+  .landing-hero-inner { padding-inline-end: var(--gutter); padding-block-end: 11rem; }
   .landing-hero::before {
-    background: linear-gradient(180deg, #070f20f2, #070f20db 50%, transparent 84%),
-                linear-gradient(0deg, var(--page), transparent 24%);
+    background: linear-gradient(180deg, #070f20eb, #070f20cc 41%, transparent 74%),
+                linear-gradient(0deg, var(--page), transparent 19%);
   }
-  .landing-art { object-position: 74% 55%; }
-  .landing-setup { grid-template-columns: minmax(0, 1fr); }
+  .landing-art img { object-position: center 65%; }
   .landing-page .site-bar .landing-nav-guide { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
