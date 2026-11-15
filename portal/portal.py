@@ -324,15 +324,17 @@ def page(title, body, wide=False, layout='', actions='', *, theme=''):
 
 CLIENT_GUIDE = '''<details class="client-guide surface">
   <summary>客户端下载与使用教程</summary>
-  <p>安卓、iOS、Windows 和 macOS 首推 Hiddify。安装后，从本页上方复制「Clash 订阅链接」。</p>
+  <p><strong>本站只提供 Clash 订阅链接，客户端可自行选择。</strong> 任何能导入 Clash 订阅且支持本站节点协议（VLESS + WebSocket + TLS）的开源客户端都可以使用。</p>
+  <p><strong>推荐 Hiddify，是因为它支持主流手机和电脑平台。</strong> 安卓、iOS、Windows、macOS 和 Linux 用户可按设备下载安装。安装后，从「我的订阅」复制「Clash 订阅链接」，导入你选用的客户端。</p>
   <details open>
-    <summary>Hiddify · 四个平台首选</summary>
+    <summary>Hiddify · 跨平台推荐</summary>
     <h3>按设备下载</h3>
     <dl class="client-platforms">
       <div><dt>安卓</dt><dd>从 <a href="https://play.google.com/store/apps/details?id=app.hiddify.com">Google Play</a> 安装。也可到 <a href="https://github.com/hiddify/hiddify-app/releases/latest">官方发布页</a> 下载通用 APK。</dd></div>
       <div><dt>iPhone / iPad</dt><dd>在 <a href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532">App Store</a> 点「获取」。开发者为 Holistic Resilience，客户端下载免费。</dd></div>
       <div><dt>Windows</dt><dd>从 <a href="https://apps.microsoft.com/detail/9ndgwm32bnxk">Microsoft Store</a> 安装，或在 <a href="https://github.com/hiddify/hiddify-app/releases/latest">官方发布页</a> 下载 Windows 安装包。普通 Intel 或 AMD 电脑选 x64。</dd></div>
       <div><dt>macOS</dt><dd>从 <a href="https://github.com/hiddify/hiddify-app/releases/latest">官方发布页</a> 下载 macOS 的 <code>.dmg</code>，打开后把 Hiddify 拖到「应用程序」。Apple 芯片机型也可以从 App Store 安装。</dd></div>
+      <div><dt>Linux</dt><dd>按 <a href="https://hiddify.com/app/How-to-install-Hiddify-app/#install-on-linux">官方安装说明</a> 选择适合发行版和 CPU 架构的安装包。</dd></div>
     </dl>
     <h3>导入并连接</h3>
     <ol>
