@@ -119,8 +119,7 @@ button.danger:hover { background: #482537; }
   background: var(--control); color: var(--ink); overflow: auto; overscroll-behavior: contain;
 }
 .portal-drawer[open] { display: block; animation: drawer-in 200ms ease-out; }
-.portal-drawer::backdrop { background: #020711be; }
-body:has(.portal-drawer[open]) { overflow: hidden; }
+.portal-drawer::backdrop { background: #020711be; overflow: hidden; overscroll-behavior: contain; }
 @keyframes drawer-in { from { transform: translateX(-100%); } }
 @supports (transition-behavior: allow-discrete) and (overlay: auto) {
   .portal-drawer, .portal-drawer[open] {

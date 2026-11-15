@@ -718,7 +718,8 @@ def portal_app(title, body, section, admin=False, username=''):
                   '<nav class="portal-menu" aria-label="功能菜单">' + links + '</nav>')
     return (page_head(title + ' · Cheapcoding') + '<body>' + SKIP_LINK + '<div class="portal-shell">'
             '<aside class="portal-sidebar">' + navigation + '</aside>'
-            '<dialog class="portal-drawer" id="portal-drawer" aria-label="功能菜单">' + navigation + '</dialog>'
+            '<dialog class="portal-drawer" id="portal-drawer" aria-label="功能菜单" closedby="any">' +
+            navigation + '</dialog>'
             '<main class="portal-main" id="main-content" tabindex="-1">'
             '<header class="portal-top"><div class="portal-heading">'
             '<button type="button" class="portal-menu-open secondary" aria-controls="portal-drawer" '

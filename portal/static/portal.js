@@ -247,14 +247,21 @@ document.addEventListener('click', async event => {
     });
     drawer.addEventListener('close', () => {
         opener.setAttribute('aria-expanded', 'false');
-        if (mobile.matches) opener.focus({preventScroll: true});
     });
-    drawer.addEventListener('click', event => {
-        if (event.target !== drawer) return;
-        const bounds = drawer.getBoundingClientRect();
-        if (event.clientX < bounds.left || event.clientX >= bounds.right ||
-            event.clientY < bounds.top || event.clientY >= bounds.bottom) drawer.close();
-    });
+    if (!('closedBy' in drawer)) {
+        let pressedOutside = false;
+        const isOutside = event => {
+            const bounds = drawer.getBoundingClientRect();
+            return event.clientX < bounds.left || event.clientX >= bounds.right ||
+                event.clientY < bounds.top || event.clientY >= bounds.bottom;
+        };
+        drawer.addEventListener('pointerdown', event => { pressedOutside = isOutside(event); });
+        drawer.addEventListener('pointerup', event => {
+            if (pressedOutside && isOutside(event)) drawer.close();
+            pressedOutside = false;
+        });
+        drawer.addEventListener('pointercancel', () => { pressedOutside = false; });
+    }
     mobile.addEventListener('change', () => {
         if (!mobile.matches && drawer.open) drawer.close();
     });
