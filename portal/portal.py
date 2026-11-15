@@ -59,8 +59,6 @@ PANEL_CLIENTS_URL = '/admin/panel/clients'
 TRAFFIC_CYCLES = {'never': '不重置', 'hourly': '每小时', 'daily': '每天', 'weekly': '每周', 'monthly': '每月'}
 EXPIRY_MODES = {'fixed': '指定到期时间', 'delayed': '首次连接后计时', 'unlimited': '长期有效'}
 
-CSS = '<style>\n*{box-sizing:border-box}\n:root{color-scheme:light;--ink:#172733;--muted:#506370;--line:#dce6ea;--page:#eef3f5;--accent:#076855;--accent-dark:#075445;--soft:#e7f4ee}\nbody{margin:0;background:var(--page);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Microsoft YaHei",sans-serif}\na{color:var(--accent);text-underline-offset:3px;overflow-wrap:anywhere}\nbutton,input,select{font:inherit}\nbutton,a,input,select,summary{touch-action:manipulation}\n:focus-visible{outline:3px solid #2465cf;outline-offset:3px}\n.site-header{background:#102b32;color:#fff}\n.site-bar{width:min(1180px,100% - 40px);min-height:67px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}\n.brand{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-size:19px;font-weight:760;letter-spacing:-.02em}\n.brand-mark{display:block;flex:none;width:31px;height:31px;object-fit:contain}\n.site-bar nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:14px}\n.site-bar nav a,.site-bar nav button{color:#dcf0ec;background:transparent;border:1px solid #476065;border-radius:8px;padding:7px 11px;text-decoration:none;min-height:38px;font-size:14px}\n.site-bar nav form{margin:0}\nmain{width:min(100% - 40px,1120px);margin:36px auto 60px}\nmain.narrow{width:min(100% - 40px,470px);margin-top:clamp(38px,9vh,112px)}\nh1,h2,h3,p{margin:0}h1{font-size:clamp(30px,5vw,47px);line-height:1.18;letter-spacing:-.038em}\nh2{font-size:22px;line-height:1.25;letter-spacing:-.025em}\nh3{font-size:17px;line-height:1.35}p+ p{margin-top:10px}\nsmall,.muted{color:var(--muted)}\n.page-intro{margin-bottom:24px}.page-intro .muted{margin-top:8px}\n.surface,.account,.auth-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:clamp(17px,3vw,26px);min-width:0;box-shadow:0 5px 16px #152d3910}\n.auth-card{padding:clamp(23px,5vw,38px);border-top:4px solid var(--accent);box-shadow:0 14px 38px #152d3914}\n.auth-card form{margin-top:21px}.auth-card button{width:100%}.auth-note{margin-top:18px;font-size:14px;color:var(--muted)}\n.hero-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}\n.status{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:700;background:#ddf4e9;color:#095742;white-space:nowrap}\n.status.inactive{background:#ffead7;color:#784011}\n.dashboard-grid,.operations-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}\n.surface h2{margin-bottom:9px}.surface p{margin-bottom:12px}.surface p:last-child{margin-bottom:0}\n.message{background:#e9f3ee;border:1px solid #cde6da;color:#194f40;border-radius:10px;padding:12px 14px;margin:0 0 16px;overflow-wrap:anywhere}\nlabel{display:block;font-size:14px;font-weight:640;margin:0 0 13px}\ninput,select{display:block;width:100%;min-width:0;min-height:44px;border:1px solid #bccdd1;border-radius:9px;background:#fff;color:var(--ink);padding:9px 11px;margin-top:5px}\ninput[readonly]{background:#f3f7fc;font-weight:400;font-family:ui-monospace,monospace;font-size:13px}\ninput.inline{display:inline;width:auto;min-height:0;margin:0 5px 0 0;accent-color:var(--accent)}\nbutton{min-height:44px;padding:9px 15px;background:var(--accent);border:1px solid transparent;border-radius:9px;color:#fff;font-weight:660;cursor:pointer}\nbutton:hover{background:var(--accent-dark)}button.secondary{background:#fff;color:var(--accent);border-color:#bdd0eb}\nbutton.secondary:hover{background:var(--soft)}button.danger{background:#fff;color:#963a2f;border-color:#e5c0ba}\n.actions,.guide-links{display:flex;align-items:center;flex-wrap:wrap;gap:9px 13px}\n.copy-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}\n.copy-line input{margin:0}.copy-line button{white-space:nowrap}\n.copy-feedback{display:block;font-size:13px;color:var(--muted)}.copy-feedback:not(:empty){margin-top:6px}\n.field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}\n.client-guide summary{cursor:pointer;color:var(--accent);font-weight:680}\n.client-guide{background:#fff;border:1px solid var(--line);border-radius:16px;padding:clamp(17px,3vw,26px);margin:17px 0 0}\n.client-guide>p{margin:7px 0 13px;color:var(--muted)}\n.client-guide details{border-top:1px solid var(--line);padding:13px 0}\n.client-guide details:last-child{padding-bottom:0}\n.client-guide h3{margin:17px 0 8px}.client-guide ol{padding-left:1.45rem}\n.client-guide li+li{margin-top:.35rem}\n.client-platforms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:9px;margin:0}\n.client-platforms div{background:#f1f6f5;padding:10px 12px;border-radius:8px}\n.client-guide dt{font-weight:680}.client-guide dd{margin:4px 0 0;color:var(--muted)}\n.guide-links{margin:11px 0}.guide-questions dt:not(:first-child){margin-top:12px}\n.voucher-output{background:var(--soft);border:1px solid #b9dbcc;border-radius:12px;padding:14px;margin-bottom:17px}\n.voucher-output label{margin-bottom:5px}.voucher-output .muted{margin-top:5px;font-size:13px}\n@media(max-width:650px){.site-bar,main,main.narrow{width:calc(100% - 28px)}.site-bar{min-height:61px}\nmain{margin-top:22px}.dashboard-grid,.operations-grid{grid-template-columns:1fr}\n.hero-meta{gap:12px 25px}.site-bar nav a,.site-bar nav button{font-size:13px}.brand{font-size:17px}}\n@media(max-width:360px){.field-row{grid-template-columns:1fr;gap:0}.hero-meta{display:grid}.site-bar nav{gap:5px}}\n\n\n:root{--ink:#192332;--muted:#526176;--line:#e2e8f0;--page:#f3f6fa;--accent:#2465cf;--accent-dark:#194fa9;--soft:#ebf3ff}\nbody{font-family:Inter,system-ui,-apple-system,"Microsoft YaHei",sans-serif}\n.site-header{background:#192536}.site-bar{width:min(1260px,100% - 36px);min-height:60px}\n.site-bar nav button{border-color:#526275;color:#f1f5fc}\nmain{width:min(1240px,100% - 36px);margin:26px auto 46px}\nh1{font-size:clamp(27px,3vw,34px);letter-spacing:-.03em}h2{font-size:19px}h3{font-size:16px}\n.page-intro{margin-bottom:16px}.surface,.auth-card,.client-guide{border-radius:12px;box-shadow:0 2px 7px #24355008}\n.auth-card{border-top:1px solid var(--line)}.auth-card form{margin-top:17px}\n.surface{padding:17px}.surface h2{margin-bottom:11px}\n.dashboard-grid,.operations-grid{gap:12px}.dashboard-grid{align-items:start}\n.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 14px}\n.metric{margin:0}.metric dt{font-size:13px;color:var(--muted)}.metric dd{margin:5px 0 0;font-size:clamp(16px,2vw,22px);font-weight:720;overflow-wrap:anywhere}\n.metric dd .status{margin-top:3px}.metric dt,.metric dd{line-height:1.35}\n.table-panel{padding:0;overflow:hidden;margin-bottom:12px}.table-title{padding:14px 16px;border-bottom:1px solid var(--line)}\n.table-title h2{margin:0}.table-scroll{overflow:auto}\n.account-table{border-collapse:collapse;width:100%;font-size:14px}\n.account-table th,.account-table td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}\n.account-table th{background:#f7f9fc;color:#41536a;font-size:13px;white-space:nowrap}\n.account-table .usage{white-space:nowrap;font-variant-numeric:tabular-nums}.account-table tbody:last-child tr:last-child td{border-bottom:0}\n.account-table tbody tr:hover td{background:#f7faff}.account-table .account-name{font-weight:720;overflow-wrap:anywhere}\n.account-table details summary{cursor:pointer;color:var(--accent);font-weight:650;white-space:nowrap}\n.account-table details[open]{min-width:190px}.account-table details label{margin-top:10px}\n.account-table details .copy-line input{min-height:38px}.account-table details .copy-line button{min-height:38px;padding:5px 8px}\ndetails.surface>summary{cursor:pointer;font-weight:690;color:var(--ink)}\ndetails.surface[open]>summary{margin-bottom:13px}\n.account-settings{margin-top:12px}.account-settings form{max-width:490px}\n.operations-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 12px;align-items:start}\ndetails.surface[open]>form{margin-top:8px}.operations-grid .field-row{gap:8px}.operations-grid .actions{gap:5px}\n.operations-grid .actions button{font-size:13px;padding:7px 8px}\n.voucher-output{background:var(--soft);border-color:#bfd5f4}\n.message{background:#edf4ff;border-color:#c9daf8;color:#234f88}\n.client-guide{margin-top:12px}\n@media(max-width:850px){.operations-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}\n@media(max-width:650px){.site-bar,main,main.narrow{width:calc(100% - 24px)}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:12px}.dashboard-grid,.operations-grid{grid-template-columns:1fr}.account-table{min-width:690px}main{margin-top:18px}.surface{padding:14px}.table-panel{padding:0}}\n\n\n@media(max-width:650px){\n  .account-table{min-width:0}.account-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}\n  .account-table,.account-table tbody{display:block}.account-table tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px;padding:12px 14px;border-bottom:1px solid var(--line)}\n  .account-table tbody tr:last-child{border-bottom:0}.account-table td{padding:0;border:0;min-width:0;white-space:normal}\n  .account-table td:nth-child(2){text-align:right}\n  .account-table td:nth-child(3),.account-table td:last-child{grid-column:1/-1}\n  .account-table td:nth-child(3)::before{content:"到期 ";color:var(--muted)}\n  .account-table td:nth-child(4)::before{content:"上传 ";color:var(--muted)}\n  .account-table td:nth-child(5)::before{content:"下载 ";color:var(--muted)}\n  .account-table td:nth-child(6)::before{content:"已用 / 限额 ";color:var(--muted)}\n  .account-table td:nth-child(6){grid-column:1/-1}\n  .account-table td[colspan]{grid-column:1/-1}\n}\n</style>'
-PORTAL_SCRIPT = "document.addEventListener('click', async event => {\n    const button = event.target.closest('[data-copy]');\n    if (!button) return;\n    const container = button.closest('.copy-line');\n    const input = container.querySelector('input');\n    const message = container.nextElementSibling;\n    try {\n        await navigator.clipboard.writeText(input.value);\n        message.textContent = '已复制';\n    } catch {\n        input.focus();\n        input.select();\n        message.textContent = '已选中，请使用设备的复制功能。';\n    }\n});\n\n" + '(() => {\n    const picker = document.querySelector(\'.range-picker\');\n    if (!picker) return;\n    const start = picker.querySelector(\'input[name="start_date"]\');\n    const end = picker.querySelector(\'input[name="end_date"]\');\n    const presets = picker.querySelector(\'.range-presets\');\n    const buttons = presets.querySelectorAll(\'button\');\n    const summary = picker.querySelector(\'summary\');\n    const update = () => {\n        end.setCustomValidity(end.value && start.value && end.value < start.value\n            ? \'结束日期不能早于开始日期。\' : \'\');\n        buttons.forEach(button => {\n            button.setAttribute(\'aria-pressed\', String(button.dataset.start === start.value &&\n                button.dataset.end === end.value));\n        });\n    };\n    presets.hidden = false;\n    presets.addEventListener(\'click\', event => {\n        const button = event.target.closest(\'button[data-start]\');\n        if (!button) return;\n        start.value = button.dataset.start;\n        end.value = button.dataset.end;\n        update();\n    });\n    start.addEventListener(\'input\', update);\n    end.addEventListener(\'input\', update);\n    picker.addEventListener(\'toggle\', () => {\n        if (!picker.open) {\n            start.value = start.defaultValue;\n            end.value = end.defaultValue;\n            update();\n        }\n    });\n    document.addEventListener(\'click\', event => {\n        if (picker.open && !picker.contains(event.target)) picker.open = false;\n    });\n    document.addEventListener(\'keydown\', event => {\n        if (picker.open && event.key === \'Escape\') {\n            picker.open = false;\n            summary.focus();\n        }\n    });\n})();\n' + "(() => {\n    const search = document.getElementById('traffic-user-search');\n    if (!search) return;\n    const field = search.closest('.traffic-user-field');\n    const toggle = field.querySelector('.traffic-user-toggle');\n    const results = document.getElementById('traffic-user-results');\n    function setExpanded(expanded) {\n        results.hidden = !expanded;\n        toggle.setAttribute('aria-expanded', String(expanded));\n    }\n\n    function close() {\n        search.value = search.defaultValue;\n        setExpanded(false);\n    }\n\n    function show(query) {\n        const all = results.querySelector('[data-all-users]').closest('li');\n        const empty = results.querySelector('.traffic-user-empty');\n        const entries = Array.from(results.querySelectorAll('[data-client]'), link => ({\n            link,\n            row: link.closest('li'),\n            name: link.querySelector('span').textContent.toLowerCase(),\n        }));\n\n        const id = query.replace(/^#/, '') || query;\n        all.hidden = Boolean(query);\n        for (const {link, row, name} of entries) {\n            row.hidden = Boolean(query) && !name.includes(query) && !link.dataset.client.includes(id);\n        }\n        empty.hidden = !query || entries.some(({row}) => !row.hidden);\n        setExpanded(true);\n    }\n\n    function visibleLinks() {\n        return Array.from(results.querySelectorAll('li:not([hidden]) > a'));\n    }\n\n    function showAll() {\n        search.value = search.defaultValue;\n        show('');\n    }\n\n    toggle.hidden = false;\n    toggle.addEventListener('click', () => {\n        if (results.hidden) showAll();\n        else close();\n    });\n    search.addEventListener('input', () => show(search.value.trim().toLowerCase()));\n    field.addEventListener('keydown', event => {\n        if (event.isComposing) return;\n        if (event.key === 'Escape' && !results.hidden) {\n            event.preventDefault();\n            close();\n        } else if (event.key === 'ArrowDown') {\n            event.preventDefault();\n            if (results.hidden) showAll();\n            visibleLinks()[0]?.focus();\n        } else if (event.key === 'Enter' && event.target === search && !results.hidden) {\n            visibleLinks()[0]?.click();\n        }\n    });\n    results.addEventListener('keydown', event => {\n        if (event.key === 'Escape') {\n            event.preventDefault();\n            close();\n            search.focus();\n        } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {\n            event.preventDefault();\n            const links = visibleLinks();\n            const index = links.indexOf(document.activeElement);\n            if (event.key === 'ArrowUp' && index <= 0) search.focus();\n            else links[index + (event.key === 'ArrowDown' ? 1 : -1)]?.focus();\n        }\n    });\n    document.addEventListener('pointerdown', event => {\n        if (!results.hidden && !field.contains(event.target) && !results.contains(event.target)) close();\n    });\n})();\n" + '(() => {\n    const chart = document.querySelector(\'.traffic-interactive\');\n    if (!chart) return;\n    const scroll = chart.querySelector(\'.traffic-scroll\');\n    const tooltip = chart.querySelector(\'.traffic-tooltip\');\n    const fields = [\'date\', \'up\', \'down\', \'total\', \'status\'].map(key =>\n        [key, tooltip.querySelector(\'[data-field="\' + key + \'"]\')]);\n    let current = null;\n    let pinned = false;\n    let pendingTouch = null;\n    let timer = 0;\n\n    function show(day, keep = false) {\n        if (current !== day) {\n            current?.classList.remove(\'is-current\');\n            day.classList.add(\'is-current\');\n            fields.forEach(([key, field]) => { field.textContent = day.dataset[key]; });\n            current = day;\n        }\n        pinned = keep;\n        tooltip.hidden = false;\n        const bounds = chart.getBoundingClientRect();\n        const column = day.getBoundingClientRect();\n        const width = tooltip.offsetWidth;\n        const middle = column.left - bounds.left + column.width / 2;\n        const side = middle + 10 + width <= bounds.width ? middle + 10 : middle - width - 10;\n        tooltip.style.left = Math.max(0, Math.min(side, bounds.width - width)) + \'px\';\n    }\n\n    function hide() {\n        current?.classList.remove(\'is-current\');\n        current = null;\n        pinned = false;\n        tooltip.hidden = true;\n    }\n\n    function stopPress() {\n        window.clearTimeout(timer);\n        pendingTouch = null;\n    }\n\n    function column(event) {\n        return event.target.closest(\'.traffic-day\');\n    }\n\n    scroll.addEventListener(\'pointerover\', event => {\n        const day = column(event);\n        if (event.pointerType === \'mouse\' && day) show(day);\n    });\n    scroll.addEventListener(\'pointerleave\', () => {\n        if (!pinned && !scroll.contains(document.activeElement)) hide();\n    });\n    scroll.addEventListener(\'focusin\', event => {\n        const day = column(event);\n        if (day && !pendingTouch) show(day, current === day && pinned);\n    });\n    scroll.addEventListener(\'focusout\', event => {\n        if (!scroll.contains(event.relatedTarget) && !pinned) hide();\n    });\n    scroll.addEventListener(\'click\', event => {\n        const day = column(event);\n        if (day) show(day, true);\n    });\n    scroll.addEventListener(\'pointerdown\', event => {\n        const day = column(event);\n        if (!day || ![\'touch\', \'pen\'].includes(event.pointerType)) return;\n        stopPress();\n        pendingTouch = {id: event.pointerId, x: event.clientX, y: event.clientY};\n        timer = window.setTimeout(() => {\n            if (pendingTouch) show(day, true);\n        }, 430);\n    });\n    scroll.addEventListener(\'pointermove\', event => {\n        if (pendingTouch?.id === event.pointerId &&\n            Math.hypot(event.clientX - pendingTouch.x, event.clientY - pendingTouch.y) > 10) stopPress();\n    });\n    scroll.addEventListener(\'pointerup\', stopPress);\n    scroll.addEventListener(\'pointercancel\', stopPress);\n    scroll.addEventListener(\'scroll\', () => { stopPress(); hide(); }, {passive: true});\n    scroll.addEventListener(\'contextmenu\', event => {\n        if (pendingTouch || (pinned && event.pointerType !== \'mouse\')) event.preventDefault();\n    });\n    document.addEventListener(\'pointerdown\', event => {\n        if (!chart.contains(event.target)) hide();\n    });\n    document.addEventListener(\'keydown\', event => {\n        if (event.key === \'Escape\' && current) {\n            stopPress();\n            hide();\n        }\n    });\n    window.addEventListener(\'resize\', () => {\n        if (current) show(current, pinned);\n    });\n})();\n' + "(() => {\n    const shell = document.querySelector('.portal-shell');\n    if (!shell) return;\n    const sidebar = shell.querySelector('.portal-sidebar');\n    const main = shell.querySelector('.portal-main');\n    const opener = shell.querySelector('.portal-menu-open');\n    const backdrop = shell.querySelector('.portal-backdrop');\n    const mobile = window.matchMedia('(max-width: 850px)');\n    let open = false;\n\n    function render() {\n        const shown = mobile.matches && open;\n        sidebar.inert = mobile.matches && !shown;\n        main.inert = shown;\n        opener.setAttribute('aria-expanded', String(shown));\n        shell.classList.toggle('menu-open', shown);\n    }\n\n    function close() {\n        if (!open) return;\n        open = false;\n        render();\n        if (mobile.matches) opener.focus({preventScroll: true});\n    }\n\n    opener.addEventListener('click', () => {\n        if (!mobile.matches) return;\n        open = true;\n        render();\n        (sidebar.querySelector('a[aria-current]') ?? sidebar.querySelector('.brand')).focus({preventScroll: true});\n    });\n    backdrop.addEventListener('click', () => close());\n    sidebar.addEventListener('keydown', event => {\n        if (!open) return;\n        if (event.key === 'Escape') {\n            event.preventDefault();\n            close();\n        } else if (event.key === 'Tab') {\n            const links = sidebar.querySelectorAll('a[href]');\n            const first = links[0];\n            const last = links[links.length - 1];\n            if (event.shiftKey && document.activeElement === first) {\n                event.preventDefault();\n                last.focus();\n            } else if (!event.shiftKey && document.activeElement === last) {\n                event.preventDefault();\n                first.focus();\n            }\n        }\n    });\n    mobile.addEventListener('change', () => {\n        const hadSidebarFocus = sidebar.contains(document.activeElement);\n        open = false;\n        render();\n        if (mobile.matches && hadSidebarFocus) opener.focus({preventScroll: true});\n    });\n    window.addEventListener('pageshow', () => close());\n    render();\n})();\n"
 
 BRAND_IMAGE = Path(__file__).with_name('cheapcoding-vpn.webp').read_bytes()
 BRAND_IMAGE_VERSION = hashlib.sha256(BRAND_IMAGE).hexdigest()[:16]
@@ -71,13 +69,30 @@ BRAND_IMAGE_TAG = (
 
 SEA_ART = Path(__file__).with_name('cheapcoding-starry-sea.webp').read_bytes()
 SEA_ART_VERSION = hashlib.sha256(SEA_ART).hexdigest()[:16]
-SEA_THEME_CSS = (
-    f':root{{--sea-art:url("/starry-sea.webp?v={SEA_ART_VERSION}")}}\n'
-    + ':root{color-scheme:dark;--ink:#edf5ff;--muted:#a6bbd6;--line:#253c5b;--page:#081326;--accent:#62d9ff;--accent-dark:#a0ebff;--soft:#122e49;--surface:#101e35;--control:#0b182c;--on-accent:#051524}\nbody{min-height:100vh;background:radial-gradient(ellipse at 88% 0%,#102e50 0,transparent 44rem),var(--page)}\n:focus-visible{outline-color:var(--accent)}\n.site-header{background:#081326;border-bottom:1px solid #18314e}\n.site-bar nav a,.site-bar nav button{color:var(--ink);border-color:var(--line)}\n.surface,.account,.auth-card,.client-guide{background:var(--surface);box-shadow:0 8px 26px #02091230}\ninput,select,.range-picker summary{background:var(--control);color:var(--ink);border-color:#365271}\ninput[readonly]{background:#0c1b30}\nbutton{color:var(--on-accent)}\nbutton.secondary,button.danger{background:var(--control)}\nbutton.secondary{border-color:#365271}\nbutton.danger{color:#ffb5be;border-color:#764152}\nbutton.danger:hover{background:#3b2335}\n.status{background:#133d42;color:#8cebdc}\n.status.inactive,.range-warning{background:#362921;color:#ffcf96;border-color:#775238}\n.message,.voucher-output{background:#112d46;border-color:#2d5573;color:#c9efff}\n.client-platforms div{background:var(--control)}\n.portal-sidebar{background:#0b172b}\n.portal-menu a,.account-table th{color:var(--muted)}\n.portal-top .actions a{font-weight:650}\n.portal-backdrop{background:#020815b5}\n.account-table th,.account-table tbody tr:hover td{background:#12253e}\n.traffic-user-results,.range-popover,.traffic-tooltip{background:#14263e;border-color:#365271;box-shadow:0 10px 24px #02081380}\n.traffic-user-results li:not([hidden])+li{border-color:var(--line)}\n.traffic-user-toggle{background:transparent;color:var(--muted)}\n.range-presets button{background:var(--control)}\n.traffic-key,.traffic-bar{background:#34c6ef}\n.traffic-key.down,.traffic-bar.down{background:#829aff}\n.traffic-bars{background:repeating-linear-gradient(to top,#243955 0 1px,transparent 1px 36px)}\n.traffic-chart .traffic-day.is-current{background:#19344f}\n.traffic-chart .traffic-day{color:var(--muted)}\n.traffic-chart .traffic-day.is-current time{color:var(--ink)}\n.auth-page,.landing-page{background:#040d21}\n.auth-page .site-header,.landing-page .site-header{background:#061025}\n.auth-page .site-bar,.landing-page .site-bar{width:min(1200px,calc(100% - 48px));min-height:72px}\n.auth-page main.narrow{position:relative;width:min(1200px,calc(100% - 48px));margin:0 auto;\n  display:flex;justify-content:flex-end;align-items:center;min-height:calc(100svh - 73px);padding:48px 0}\n.auth-page::before{content:"";position:absolute;inset:73px 0 0;pointer-events:none;\n  transform:scaleX(-1);background:linear-gradient(270deg,#040d2110,#040d21dd 84%),var(--sea-art) center/cover no-repeat}\n.auth-card{width:min(100%,445px);padding:clamp(23px,4vw,40px);border-radius:20px;border-color:#2e4c6c;\n  background:#0d1b31f7;box-shadow:0 20px 58px #010714a0}\n.auth-card h1{font-size:clamp(27px,3vw,34px)}\n.auth-card form{margin-top:22px}\n.auth-card form input{min-height:48px}\n.auth-card button{min-height:48px;margin-top:4px}\n.auth-note{line-height:1.65}\n.auth-back{font-size:14px;font-weight:650}\n.landing-page .landing-main{width:100%;max-width:none;margin:0}\n.landing-hero{background:#040d21;position:relative;isolation:isolate;min-height:clamp(530px,70svh,780px);display:grid;align-items:center}\n.landing-hero::before{content:"";position:absolute;inset:0;z-index:-1;\n  background:linear-gradient(90deg,#040b20d9 0%,#040b2078 36%,transparent 70%),\n  linear-gradient(0deg,#040d21 0%,transparent 25%),var(--sea-art) center 55%/cover no-repeat}\n.landing-hero-inner,.landing-features{width:min(1200px,calc(100% - 48px));margin-inline:auto}\n.landing-hero-inner{padding-block:68px}\n.landing-hero h1{font-size:clamp(52px,7.7vw,112px);line-height:1.05;letter-spacing:-.065em;\n  max-width:8em;color:#f1f8ff;text-wrap:balance}\n.landing-hero h1 span{display:block;color:#8ceaff}\n.landing-hero p{max-width:24em;margin:22px 0 29px;color:#c1d7f0;font-size:clamp(16px,1.65vw,20px)}\n.landing-connect{display:inline-flex;align-items:center;gap:17px;padding:12px 21px;min-height:50px;\n  border-radius:10px;background:#82e3ff;color:#061a30;font-weight:760;text-decoration:none;box-shadow:0 7px 25px #32cfff26}\n.landing-connect:hover{background:#b5efff}\n.landing-connect span{font-size:21px;line-height:1}\n.landing-features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;\n  border-block:1px solid var(--line);margin-bottom:42px}\n.landing-feature{padding:22px 24px 24px;border-right:1px solid var(--line)}\n.landing-feature:first-child{padding-left:0}\n.landing-feature:last-child{border-right:0}\n.landing-feature h2{font-size:16px;font-weight:730;color:#c3efff;margin-bottom:6px}\n.landing-feature p{font-size:14px;color:var(--muted)}\n@media(max-width:680px){\n  .auth-page .site-bar,.landing-page .site-bar,.landing-hero-inner,.landing-features{width:calc(100% - 36px)}\n  .auth-page .site-bar,.landing-page .site-bar{min-height:60px}\n  .auth-page::before{inset:61px 0 0;transform:none;background:linear-gradient(#040d2155,#040d21d4 75%),var(--sea-art) 66% center/cover no-repeat}\n  .auth-page main.narrow{min-height:calc(100svh - 61px);justify-content:center;padding:42px 0;width:calc(100% - 36px)}\n  .landing-hero{min-height:560px;align-items:start}\n  .landing-hero::before{background:linear-gradient(180deg,#040d21ab 0%,#040d2150 38%,transparent 59%,#040d21 100%),var(--sea-art) 74% 64%/auto 100% no-repeat}\n  .landing-hero-inner{padding:49px 0 184px}\n  .landing-hero h1{font-size:clamp(44px,11vw,70px);max-width:7em}\n  .landing-hero p{max-width:19em;margin:15px 0 23px}\n  .landing-features{grid-template-columns:1fr;margin-bottom:24px}\n  .landing-feature,.landing-feature:first-child{padding:13px 0;border:0}\n  .landing-feature+.landing-feature{border-top:1px solid var(--line)}\n}\n'
-)
 
-PORTAL_SCRIPT_VERSION = hashlib.sha256(PORTAL_SCRIPT.encode()).hexdigest()[:16]
-PORTAL_SCRIPT_TAG = f'<script src="/portal.js?v={PORTAL_SCRIPT_VERSION}" defer></script>'
+STATIC = Path(__file__).with_name('static')
+PORTAL_STYLE = (f':root{{--sea-art:url("/starry-sea.webp?v={SEA_ART_VERSION}")}}\n' +
+                (STATIC / 'portal.css').read_text(encoding='utf-8'))
+PORTAL_SCRIPT = (STATIC / 'portal.js').read_text(encoding='utf-8')
+ADMIN_LIVE_SCRIPT = (STATIC / 'admin-live.js').read_text(encoding='utf-8')
+FRONTEND_ASSETS = {
+    '/portal.css': (PORTAL_STYLE, 'text/css; charset=utf-8'),
+    '/portal.js': (PORTAL_SCRIPT, 'application/javascript; charset=utf-8'),
+}
+FRONTEND_VERSIONS = {
+    url: hashlib.sha256(body.encode()).hexdigest()[:16]
+    for url, (body, _) in FRONTEND_ASSETS.items()
+}
+PORTAL_STYLE_TAG = f'<link rel="stylesheet" href="/portal.css?v={FRONTEND_VERSIONS["/portal.css"]}">'
+PORTAL_SCRIPT_TAG = f'<script src="/portal.js?v={FRONTEND_VERSIONS["/portal.js"]}" defer></script>'
+
+SKIP_LINK = '<a class="skip-link" href="#main-content">跳到正文</a>'
+
+
+def page_head(title, metadata=''):
+    return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width, initial-scale=1">'
+            f'{metadata}<title>{html.escape(title)}</title>{PORTAL_STYLE_TAG}</head>')
 
 
 class PortalError(Exception):
@@ -313,13 +328,11 @@ def page(title, body, wide=False, layout='', actions='', *, theme=''):
         content = '<section class="auth-card">' + heading + body + '</section>'
     else:
         content = ('<div class="page-intro">' + heading + '</div>' if heading else '') + body
-    return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
-            '<meta name="viewport" content="width=device-width, initial-scale=1">'
-            '<title>' + html.escape(title) + ' · Cheapcoding</title>' + CSS.replace('</style>', CLIENT_EDITOR_CSS + SEA_THEME_CSS + '</style>') + '</head><body' + body_class + '>'
+    return (page_head(title + ' · Cheapcoding') + '<body' + body_class + '>' + SKIP_LINK +
             '<header class="site-header"><div class="site-bar">'
             '<a class="brand" href="/">' + BRAND_IMAGE_TAG + 'Cheapcoding VPN</a>' +
-            nav + '</div></header><main class="' + main_class + '">' + content +
-            '</main>' + PORTAL_SCRIPT_TAG + '</body></html>')
+            nav + '</div></header><main id="main-content" tabindex="-1" class="page-content ' + main_class + '">' +
+            content + '</main>' + PORTAL_SCRIPT_TAG + '</body></html>')
 
 
 CLIENT_GUIDE = '''<details class="client-guide surface">
@@ -441,7 +454,6 @@ def subscription(account):
     )
 
 
-
 COOKIE = '__Host-ccvpn'
 FORM_COOKIE = '__Host-ccvpn-form'
 POST_FORM = re.compile(r'<form method="post"[^>]*>')
@@ -517,19 +529,17 @@ def cookie_header(token='', lifetime=0):
 
 def landing_page():
     features = (
-        ('多端连接', '支持 Android、iOS、Windows 和 macOS。'),
+        ('多端连接', '支持 Android、iOS、Windows、macOS 和 Linux。'),
         ('规则分流', '国内流量、局域网及本站域名直连，其余流量走代理。'),
         ('订阅自助管理', '查看用量、到期时间和订阅链接，也可自助续期。'),
     )
     cards = ''.join(f'<article class="landing-feature"><h2>{heading}</h2><p>{detail}</p></article>'
                     for heading, detail in features)
-    return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
-            '<meta name="viewport" content="width=device-width, initial-scale=1">'
-            '<meta name="description" content="Cheapcoding VPN 支持多端连接、规则分流和自助订阅管理。">'
-            '<title>Cheapcoding VPN</title>' + CSS.replace('</style>', SEA_THEME_CSS + '</style>') +
-            '</head><body class="landing-page"><header class="site-header"><div class="site-bar">'
+    metadata = '<meta name="description" content="Cheapcoding VPN 支持多端连接、规则分流和自助订阅管理。">'
+    return (page_head('Cheapcoding VPN', metadata) + '<body class="landing-page">' + SKIP_LINK +
+            '<header class="site-header"><div class="site-bar">'
             '<a class="brand" href="/">' + BRAND_IMAGE_TAG + 'Cheapcoding VPN</a></div></header>'
-            '<main class="landing-main"><section class="landing-hero" aria-labelledby="landing-title">'
+            '<main id="main-content" tabindex="-1"><section class="landing-hero" aria-labelledby="landing-title">'
             '<div class="landing-hero-inner"><h1 id="landing-title">连接<span>更远的世界</span></h1>'
             '<p>在常用设备上导入订阅，按规则连接。用量与订阅状态，登录即可查看。</p>'
             '<a class="landing-connect" href="/login">去连接<span aria-hidden="true">↗</span></a>'
@@ -625,21 +635,23 @@ def subscription_table(accounts, panel_clients, empty_message="暂无账号"):
         if not account['activated']:
             activation = copy_field('首次激活链接', HOME + '/account/' + account['access_key'], 'activate-' + item_id)
         rows.append(
-            '<tr data-account-id="' + item_id + '"><td class="account-name">' + name +
-            '</td><td><span class="' + state_class + '">' + status + '</span></td><td>' +
-            expiration(current) + '</td><td class="usage">' + readable_traffic(up) +
-            '</td><td class="usage">' + readable_traffic(down) + '</td><td class="usage">' +
+            '<tr role="row" data-account-id="' + item_id + '"><td role="cell" class="account-name">' + name +
+            '</td><td role="cell"><span class="' + state_class + '">' + status + '</span></td>'
+            '<td role="cell"><span class="mobile-cell-label" aria-hidden="true">到期</span>' +
+            expiration(current) + '</td><td role="cell" class="usage"><span class="mobile-cell-label" aria-hidden="true">上传</span>' +
+            readable_traffic(up) + '</td><td role="cell" class="usage"><span class="mobile-cell-label" aria-hidden="true">下载</span>' +
+            readable_traffic(down) + '</td><td role="cell" class="usage"><span class="mobile-cell-label" aria-hidden="true">已用 / 限额</span>' +
             readable_traffic(up+down) + ' / ' + (readable_traffic(quota) if quota else '不限额') +
-            '</td><td class="row-actions"><a class="edit-link" href="/admin/operations/?client=' + item_id +
+            '</td><td role="cell" class="row-actions"><a class="edit-link" href="/admin/operations/?client=' + item_id +
             '">编辑</a><details><summary>链接</summary>' +
             copy_field('Clash 订阅链接', HOME + '/sub/' + account['subscription'], 'subscribe-' + item_id) +
             activation + '</details></td></tr>')
-    body = ''.join(rows) if rows else f'<tr><td colspan="7">{empty_message}</td></tr>'
+    body = ''.join(rows) if rows else f'<tr role="row"><td role="cell" colspan="7">{empty_message}</td></tr>'
     return ('<section class="surface table-panel"><div class="table-title"><h2>账号列表（' + str(len(rows)) +
             '）</h2></div><div class="table-scroll" role="region" aria-label="账号和流量" tabindex="0">'
-            '<table class="account-table"><thead><tr><th scope="col">用户名</th><th scope="col">状态</th>'
+            '<table class="account-table" role="table"><thead role="rowgroup"><tr role="row"><th scope="col">用户名</th><th scope="col">状态</th>'
             '<th scope="col">到期时间</th><th scope="col">上传</th><th scope="col">下载</th>'
-            '<th scope="col">已用 / 限额</th><th scope="col">操作</th></tr></thead><tbody>' +
+            '<th scope="col">已用 / 限额</th><th scope="col">操作</th></tr></thead><tbody role="rowgroup">' +
             body + '</tbody></table></div></section>')
 
 
@@ -655,81 +667,6 @@ def admin_subscriptions(panel_id=None):
     empty = '暂无账号' if panel_id is None else '该账号已删除或不再属于此节点。'
     return subscription_table(shown, panel_clients, empty), [row['name'] for row in accounts], known
 
-
-PORTAL_APP_CSS = """
-:root{--page:#f6f8fb;--line:#e2e8f0;--accent:#067765;--accent-dark:#056151;--soft:#e9f6f2}
-.portal-shell{--sidebar-width:232px;min-height:100vh}
-.portal-sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar-width);z-index:12;overflow-y:auto;background:#fff;border-right:1px solid var(--line);padding:20px 12px}
-.portal-sidebar-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 5px 25px}
-.portal-sidebar .brand{color:var(--ink);white-space:nowrap;font-size:17px}
-.portal-sidebar .brand-mark{width:35px;height:35px}
-.portal-menu{display:grid;gap:4px}
-.portal-menu a{display:flex;align-items:center;gap:10px;text-decoration:none;color:#43536a;font-size:14px;font-weight:600;padding:11px 12px;border-radius:8px;white-space:nowrap}
-.portal-menu a:hover,.portal-menu a[aria-current]{color:var(--accent);background:var(--soft)}
-.portal-menu a[aria-current]{font-weight:720}
-.portal-menu a svg{width:18px;height:18px;flex:none}
-.portal-main{margin:0 0 0 var(--sidebar-width);width:calc(100% - var(--sidebar-width));max-width:none;padding:24px clamp(17px,3vw,38px) 44px}
-.portal-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-.portal-heading{display:flex;align-items:center;gap:9px;min-width:0}
-.portal-menu-open{display:none}
-.portal-backdrop{display:none;position:fixed;inset:0;z-index:11;background:#14223775}
-@media(max-width:850px){
-.portal-shell{--drawer-duration:220ms;--drawer-ease:cubic-bezier(.22,.75,.25,1)}
-.portal-sidebar{width:min(var(--sidebar-width),calc(100vw - 40px));padding:18px 12px;
-  transform:translateX(-100%);visibility:hidden;
-  transition:transform var(--drawer-duration) var(--drawer-ease),visibility 0s var(--drawer-duration)}
-.portal-shell{isolation:isolate}
-.portal-main{position:relative;z-index:0}
-.portal-shell.menu-open .portal-sidebar{transform:translateX(0);visibility:visible;transition-delay:0s}
-.portal-menu-open{display:grid;place-items:center;width:36px;min-height:36px;padding:0;appearance:none}
-.portal-menu-open,.portal-sidebar a,.portal-backdrop{-webkit-tap-highlight-color:transparent}
-.portal-menu-open:focus-visible,.portal-sidebar a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.portal-shell.menu-open .portal-menu-open{visibility:hidden}
-.portal-menu-open svg{width:19px;height:19px}
-.portal-main{margin:0;width:100%;padding-top:16px}.portal-top{margin-bottom:13px}
-.portal-backdrop{display:block;opacity:0;visibility:hidden;
-  transition:opacity var(--drawer-duration) ease,visibility 0s var(--drawer-duration)}
-.portal-shell.menu-open .portal-backdrop{opacity:1;visibility:visible;transition-delay:0s}
-body:has(.portal-shell.menu-open){overflow:hidden}
-}
-@media(prefers-reduced-motion:reduce){.portal-shell{--drawer-duration:0ms}}
-.portal-top h1{font-size:clamp(24px,3vw,32px)}.portal-top .actions{margin-left:auto}
-.portal-top .actions form{margin:0}.portal-top .actions a,.portal-top button{font-size:14px;white-space:nowrap}
-.panel-form{max-width:570px}.panel-form+.panel-form{margin-top:12px}.portal-main .client-guide{margin:0}
-.traffic-filters{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:17px}
-.traffic-filters label{margin:0;min-width:130px;max-width:min(100%,300px);flex:0 1 210px}
-.traffic-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
-.traffic-card{margin-bottom:12px}.traffic-caption,.traffic-legend{font-size:13px;color:var(--muted)}
-.traffic-legend{display:flex;gap:15px;flex-wrap:wrap}.traffic-legend span{display:inline-flex;align-items:center;gap:6px}
-.traffic-key{display:inline-block;width:9px;height:9px;border-radius:2px;background:#087f6c}
-.traffic-key.down,.traffic-bar.down{background:#426add}
-.traffic-scroll{overflow:auto;margin:12px 0}
-.traffic-chart{min-width:var(--chart-min);display:flex;gap:3px;align-items:stretch;border-bottom:1px solid var(--line)}
-.traffic-day{min-width:0;flex:1;display:flex;flex-direction:column;text-align:center;color:var(--muted);font-size:11px;line-height:1.15}
-.traffic-bars{height:145px;display:flex;align-items:end;justify-content:center;gap:3px;background:repeating-linear-gradient(to top,#e2e8f0 0 1px,transparent 1px 36px)}
-.traffic-bar{width:27%;max-width:20px;min-width:3px;background:#087f6c;border-radius:4px 4px 0 0;height:var(--bar-height)}
-.traffic-day time{padding:8px 0;white-space:nowrap}.traffic-day.unobserved .traffic-bars{opacity:.38}
-.traffic-interactive{position:relative}
-.traffic-chart .traffic-day{border:0;border-radius:5px;background:transparent;padding:0;font-weight:500;cursor:crosshair;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-x pan-y}
-.traffic-chart .traffic-day:focus-visible{outline-offset:-2px}
-.traffic-chart .traffic-day.is-current{background:#e9f3f3}
-.traffic-chart .traffic-day.is-current time{color:var(--ink);font-weight:720}
-.traffic-tooltip{position:absolute;z-index:2;top:7px;pointer-events:none;min-width:145px;max-width:100%;padding:9px 11px;border:1px solid #dce5ec;border-radius:8px;background:#fff;color:var(--ink);box-shadow:0 5px 17px #19233225;font-size:13px;line-height:1.4}
-.traffic-tooltip strong{display:block;margin-bottom:4px;font-size:13px}
-.traffic-tooltip dl,.traffic-tooltip dd{margin:0}
-.traffic-tooltip dl div{display:flex;justify-content:space-between;gap:12px}
-.traffic-tooltip dt{display:flex;align-items:center;gap:5px;color:var(--muted)}
-.traffic-tooltip dd{font-variant-numeric:tabular-nums;font-weight:650;white-space:nowrap}
-.traffic-tooltip .traffic-tooltip-total{border-top:1px solid var(--line);margin-top:4px;padding-top:4px}
-.traffic-tooltip-status{display:block;color:var(--muted);font-size:12px;margin-top:3px}
-.traffic-data{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
-.traffic-data th,.traffic-data td{padding:9px 7px;border-bottom:1px solid var(--line);text-align:left}
-.traffic-data th{color:var(--muted);font-size:13px}.traffic-data tr:last-child td{border-bottom:0}
-@media(max-width:440px){
-.traffic-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.traffic-metrics .metric:last-child{grid-column:1/-1}
-.traffic-filters label{flex-basis:125px;min-width:100px}.traffic-data th,.traffic-data td{padding:7px 4px;font-size:12px}
-}
-"""
 
 ADMIN_PAGES = {
     'traffic': ('流量仪表盘', '/admin/operations/traffic'),
@@ -776,66 +713,18 @@ def portal_app(title, body, section, admin=False, username=''):
     else:
         actions = ('<span class="muted">' + html.escape(username) + '</span>'
                    '<form method="post" action="/logout"><button class="secondary">退出登录</button></form>')
-    return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
-            '<meta name="viewport" content="width=device-width, initial-scale=1">'
-            '<title>' + html.escape(title) + ' · Cheapcoding</title>' +
-            CSS.replace('</style>', CLIENT_EDITOR_CSS + PORTAL_APP_CSS + TRAFFIC_RANGE_CSS + SEA_THEME_CSS + '</style>') +
-            '</head><body><div class="portal-shell"><aside class="portal-sidebar" id="portal-sidebar">'
-            '<div class="portal-sidebar-head"><a class="brand" href="' + pages['traffic'][1] +
-            '">' + BRAND_IMAGE_TAG + 'Cheapcoding VPN</a></div>'
-            '<nav class="portal-menu" aria-label="功能菜单">' + links + '</nav></aside>'
-            '<div class="portal-backdrop" aria-hidden="true"></div>'
-            '<main class="portal-main"><header class="portal-top"><div class="portal-heading">'
-            '<button type="button" class="portal-menu-open secondary" aria-controls="portal-sidebar" '
-            'aria-expanded="false" aria-label="打开导航">' + portal_icon('menu') + '</button>'
-            '<h1>' + html.escape(title) + '</h1></div><div class="actions">' + actions + '</div></header>' + body +
-            '</main></div>' + PORTAL_SCRIPT_TAG + '</body></html>')
-
-
-TRAFFIC_RANGE_CSS = """
-.traffic-toolbar{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin-bottom:17px}
-.traffic-toolbar .traffic-filters{margin:0}
-.traffic-user-field{flex:1 1 245px;max-width:340px;min-width:0}
-.traffic-user-field label{margin:0}.traffic-user-field input{margin:5px 0 0;padding-right:76px}
-.traffic-user-input{position:relative}
-.traffic-user-clear{position:absolute;right:39px;top:50%;transform:translateY(-50%);padding:4px 8px;color:var(--muted);font-size:19px;line-height:1;text-decoration:none;border-radius:5px}
-.traffic-user-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:31px;min-height:32px;padding:0;background:transparent;color:var(--muted)}
-.traffic-user-toggle[hidden]{display:none}
-.traffic-user-toggle:hover{background:var(--soft);color:var(--accent)}
-.traffic-user-toggle::before{content:"";width:8px;height:8px;border:solid currentColor;border-width:0 1.6px 1.6px 0;transform:translateY(-2px) rotate(45deg)}
-.traffic-user-toggle[aria-expanded="true"]::before{transform:translateY(2px) rotate(225deg)}
-.traffic-user-input input::-webkit-search-cancel-button{display:none}
-.traffic-user-clear:hover{color:var(--accent);background:var(--soft)}
-.traffic-user-results{flex:1 0 100%;min-width:0;max-height:244px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:9px;margin:0;padding:4px 8px;list-style:none}
-.traffic-user-results li:not([hidden])+li{border-top:1px solid #edf0f4}
-.traffic-user-results a{display:flex;justify-content:space-between;gap:9px;align-items:baseline;color:var(--ink);padding:8px 6px;text-decoration:none;overflow-wrap:anywhere}
-.traffic-user-results a:hover,.traffic-user-results a:focus-visible,.traffic-user-results a[aria-current]{color:var(--accent);background:var(--soft);border-radius:5px}
-.traffic-user-results small{flex:none}
-.traffic-user-empty{padding:7px;font-size:14px;color:var(--muted)}
-@media(max-width:560px){.traffic-toolbar{align-items:stretch}.traffic-user-field{flex-basis:100%;max-width:none}}
-.range-picker{position:relative;min-width:0}
-.range-picker summary{display:flex;align-items:center;gap:9px;list-style:none;cursor:pointer;min-height:44px;padding:8px 12px;border:1px solid #bccdd1;border-radius:9px;background:#fff;color:var(--ink);font-size:14px;font-weight:650}
-.range-picker summary::-webkit-details-marker{display:none}
-.range-picker summary::after{content:"";width:7px;height:7px;border:solid var(--muted);border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin:0 2px 3px 3px}
-.range-picker[open] summary{border-color:var(--accent)}
-.range-picker[open] summary::after{transform:rotate(225deg);margin-bottom:0}
-.range-caption{display:block;color:var(--ink);font-size:14px;font-weight:640;margin-bottom:5px}
-.range-popover{position:absolute;top:calc(100% + 7px);left:0;z-index:4;width:min(350px,calc(100vw - 36px));padding:12px;background:white;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px #19233224}
-.range-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:11px}
-.range-presets[hidden]{display:none}
-.range-presets button{min-height:36px;padding:5px 4px;color:var(--muted);background:#f6f8fb;font-size:13px}
-.range-presets button:hover,.range-presets button[aria-pressed="true"]{background:var(--soft);color:var(--accent)}
-.range-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.traffic-filters .range-dates label{min-width:0;font-size:13px;margin-bottom:10px}
-.range-dates input{font-size:14px;padding:6px;min-width:0}
-.range-warning{margin:0 0 12px;padding:9px 12px;border:1px solid #efd2ac;border-radius:8px;background:#fff7ec;color:#784011;font-size:14px}
-.traffic-pages{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:14px}
-.traffic-pages .muted{font-size:13px}
-@media(max-width:850px){
-.traffic-filters{gap:9px}.traffic-filters>.range-control{order:-1;flex-basis:100%}
-.range-picker{width:max-content;max-width:100%}
-}
-"""
+    navigation = ('<div class="portal-sidebar-head"><a class="brand" href="' + pages['traffic'][1] +
+                  '">' + BRAND_IMAGE_TAG + 'Cheapcoding VPN</a></div>'
+                  '<nav class="portal-menu" aria-label="功能菜单">' + links + '</nav>')
+    return (page_head(title + ' · Cheapcoding') + '<body>' + SKIP_LINK + '<div class="portal-shell">'
+            '<aside class="portal-sidebar">' + navigation + '</aside>'
+            '<dialog class="portal-drawer" id="portal-drawer" aria-label="功能菜单">' + navigation + '</dialog>'
+            '<main class="portal-main" id="main-content" tabindex="-1">'
+            '<header class="portal-top"><div class="portal-heading">'
+            '<button type="button" class="portal-menu-open secondary" aria-controls="portal-drawer" '
+            'aria-haspopup="dialog" aria-expanded="false" aria-label="打开导航">' + portal_icon('menu') + '</button>'
+            '<h1>' + html.escape(title) + '</h1></div><div class="actions">' + actions + '</div></header>'
+            '<div class="portal-content">' + body + '</div></main></div>' + PORTAL_SCRIPT_TAG + '</body></html>')
 
 
 def traffic_presets(today):
@@ -1098,23 +987,6 @@ def portal_admin_page(result='', code='', section='accounts', panel_id=None):
     return portal_app(ADMIN_PAGES[section][0], notice(result) + body, section, admin=True)
 
 
-CLIENT_EDITOR_CSS = """
-.row-actions{width:1%;white-space:nowrap}
-.row-actions>a,.row-actions>details:not([open]){display:inline-block;vertical-align:top;margin-right:12px}
-.row-actions>details[open]{margin-top:8px}
-.edit-link{font-weight:650;text-decoration:none}
-.edit-link:hover{text-decoration:underline}
-.client-editor{max-width:830px}
-.client-editor details{margin:4px 0 15px;border-top:1px solid var(--line);padding-top:12px}
-.client-editor details summary{cursor:pointer;color:var(--accent);font-weight:650;margin-bottom:12px}
-.client-editor .surface{margin-bottom:12px}
-.client-editor .actions .edit-link{padding:9px 4px}
-.editor-ops{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-@media(max-width:650px){.row-actions{width:auto}}
-@media(max-width:560px){.client-editor .field-row,.editor-ops{grid-template-columns:1fr;gap:0}}
-"""
-
-
 def admin_navigation():
     return '<a href="' + PANEL_CLIENTS_URL + '" target="_blank" rel="noopener">打开 3x-ui ↗</a>'
 
@@ -1357,10 +1229,6 @@ def change_service(name, action, months=0):
         return '已恢复 ' + name + ' 的订阅。'
 
 
-
-ADMIN_LIVE_SCRIPT = '(() => {\n    const list = document.getElementById(\'live-subscriptions\');\n    if (!list) return;\n    const search = document.getElementById(\'traffic-user-search\');\n    const results = document.getElementById(\'traffic-user-results\');\n    const filters = new URLSearchParams(window.location.search);\n    const url = new URL(\'/admin/operations/accounts.json\', window.location.origin);\n    if (filters.has(\'filter_client\')) url.searchParams.set(\'filter_client\', filters.get(\'filter_client\'));\n    let lastOptions = null;\n    let updating = false;\n    let lastCards = list.innerHTML;\n    let lastNames = JSON.stringify(Array.from(document.querySelectorAll(\'select[name="name"]\')[0]?.options ?? [], option => option.value));\n    async function refresh() {\n        if (document.hidden || updating) return;\n        updating = true;\n        try {\n            const response = await fetch(url, {cache: \'no-store\'});\n            if (!response.ok) return;\n            const {cards, names, options, selected_name: selectedName} = await response.json();\n            if (results?.hidden && document.activeElement !== search) {\n                if (typeof options === \'string\' && options !== lastOptions) {\n                    results.innerHTML = options;\n                    lastOptions = options;\n                }\n                if (typeof selectedName === \'string\' && search.defaultValue !== selectedName) {\n                    search.defaultValue = selectedName;\n                    search.value = selectedName;\n                }\n            }\n            if (cards !== lastCards && !list.contains(document.activeElement?.closest("details[open]"))) {\n                const expanded = new Set(Array.from(list.querySelectorAll(\'details[open]\'), detail => detail.closest(\'[data-account-id]\').dataset.accountId));\n                list.innerHTML = cards;\n                list.querySelectorAll(\'[data-account-id]\').forEach(card => {\n                    const detail = card.querySelector(\'details\');\n                    if (detail) detail.open = expanded.has(card.dataset.accountId);\n                });\n                lastCards = cards;\n            }\n            const currentNames = JSON.stringify(names);\n            if (currentNames !== lastNames) {\n                document.querySelectorAll(\'select[name="name"]\').forEach(select => {\n                    const selected = select.value;\n                    const options = names.map(name => new Option(name, name));\n                    select.replaceChildren(...options);\n                    if (names.includes(selected)) select.value = selected;\n                    else if (selected || filters.has(\'filter_client\')) select.selectedIndex = -1;\n                });\n                lastNames = currentNames;\n            }\n        } catch (error) {\n            if (!(error instanceof TypeError || error instanceof SyntaxError)) throw error;\n        } finally {\n            updating = false;\n        }\n    }\n    window.setInterval(refresh, 3000);\n    document.addEventListener(\'visibilitychange\', refresh);\n})();\n\n'
-
-
 class Handler(http.server.BaseHTTPRequestHandler):
     def setup(self):
         super().setup()
@@ -1387,7 +1255,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('X-Robots-Tag', 'noindex, nofollow')
         self.send_header('Content-Security-Policy',
-                         "default-src 'none'; style-src 'unsafe-inline'; script-src 'self'; img-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" +
+                         "default-src 'none'; style-src 'self'; style-src-attr 'unsafe-inline'; script-src 'self'; img-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" +
                          ("; connect-src 'self'" if urllib.parse.urlsplit(self.path).path == '/admin/operations/' else ''))
         for key, value in (headers or {}).items():
             self.send_header(key, str(value))
@@ -1563,9 +1431,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send(200, asset, 'image/webp',
                       cache_control='public, max-age=31536000, immutable' if versioned else 'no-store')
             return
-        if path == '/portal.js' and self.command in ('GET', 'HEAD'):
-            versioned = urllib.parse.urlsplit(self.path).query == 'v=' + PORTAL_SCRIPT_VERSION
-            self.send(200, PORTAL_SCRIPT, 'application/javascript; charset=utf-8',
+        if path in FRONTEND_ASSETS and self.command in ('GET', 'HEAD'):
+            asset, media = FRONTEND_ASSETS[path]
+            versioned = urllib.parse.urlsplit(self.path).query == 'v=' + FRONTEND_VERSIONS[path]
+            self.send(200, asset, media,
                       cache_control='public, max-age=31536000, immutable' if versioned else 'no-store')
             return
         if path == '/hiddify-routing.json' and self.command in ('GET', 'HEAD'):

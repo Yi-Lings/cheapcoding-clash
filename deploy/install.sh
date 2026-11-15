@@ -83,6 +83,8 @@ install -d -m 0755 "$app"
 mv "$stage/x-ui" "$app/"
 chmod -R a+rX "$app/x-ui"
 install -m 0644 "$repo"/portal/{portal.py,portal_traffic.py,cheapcoding-vpn.webp,cheapcoding-starry-sea.webp} "$app/"
+install -d -m 0755 "$app/static"
+install -m 0644 "$repo"/portal/static/{portal.css,portal.js,admin-live.js} "$app/static/"
 install -d -m 0700 "$conf"
 install -d -m 0700 -o clashsvc -g clashsvc "$panel" "$panel"/{db,bin,log}
 install -d -m 0700 -o clashportal -g clashportal "$portal"

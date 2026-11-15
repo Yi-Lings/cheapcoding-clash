@@ -76,6 +76,7 @@ from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 import json
+import re
 import sys
 import portal
 
@@ -98,9 +99,19 @@ admin = base + '/admin/operations/'
 filter_query = '?filter_client=' + str(account['panel_id'])
 with urlopen(Request(admin + filter_query, headers=headers), timeout=6) as response:
     page = response.read().decode()
+    assert '<dialog class="portal-drawer"' in page
+    assert 'href="#main-content"' in page
+    assert '<style>' not in page
+    for asset, mime in (('portal.css', 'text/css'), ('portal.js', 'application/javascript')):
+        path = re.search(fr'(/{re.escape(asset)}\?v=[a-f0-9]{{16}})', page)
+        assert path is not None, asset
+        with urlopen(base + path[1], timeout=6) as static:
+            assert static.headers.get_content_type() == mime
+            assert 'immutable' in static.headers['Cache-Control']
+            assert len(static.read()) > 1000
     assert '<option selected>smoke-user</option>' in page
-    assert '<td class="account-name">smoke-user</td>' in page
-    assert '<td class="account-name">smoke-other</td>' not in page
+    assert '<td role="cell" class="account-name">smoke-user</td>' in page
+    assert '<td role="cell" class="account-name">smoke-other</td>' not in page
     assert '<span>smoke-other</span>' in page
 with urlopen(Request(admin + 'accounts.json' + filter_query, headers=headers), timeout=6) as response:
     payload = json.load(response)
