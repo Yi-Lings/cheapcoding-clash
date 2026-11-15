@@ -339,13 +339,21 @@ CLIENT_GUIDE = '''<details class="client-guide surface">
       <li>复制本页上方的完整订阅链接。打开 Hiddify，在首页点 <strong>＋</strong>。</li>
       <li>选择「剪贴板（Clipboard）」。也可以选择「手动（Manually）」，名称填 <strong>Cheapcoding</strong>，在 URL 栏粘贴订阅链接后添加。</li>
       <li>在首页选中刚添加的配置，点击连接按钮。手机首次连接时，按系统提示允许添加 VPN。</li>
-      <li>如果电脑提示选择模式，选「VPN 模式」可接管所有应用的流量；主要在浏览器使用时，也可选「系统代理」。</li>
     </ol>
-    <h3>启用国内外分流</h3>
-    <p>Hiddify 导入订阅后，还需要单独导入一次路由规则。应用后，配置的直连域名及其全部子域名、局域网和中国大陆流量直连，其余流量走代理。</p>
+    <h3>服务模式：哪些应用的流量进入 Hiddify</h3>
+    <p>在「首页 → 快捷设置 → 服务模式」选择，也可以从「设置 → 入站 → 服务模式」进入。桌面软件不走代理时，优先检查这里。</p>
+    <dl class="guide-questions">
+      <dt>代理（Proxy）</dt><dd>只在电脑上启动本地代理。需要在要使用的应用内手动填写 Hiddify 的本地代理地址和端口。</dd>
+      <dt>系统代理（System proxy）</dt><dd>由 Hiddify 设置操作系统的代理。浏览器和遵循系统代理的应用会使用它，部分软件和游戏可能绕过它。</dd>
+      <dt>VPN（TUN）</dt><dd>通过虚拟网卡接管系统流量，适合需要让桌面软件和游戏也走代理的用户。Windows 首次启动 VPN 时，按提示允许管理员权限。</dd>
+    </dl>
+    <h3>路由规则：流量走直连还是代理</h3>
+    <p>服务模式和路由可以分别设置。日常可用「VPN（TUN）＋规则分流」。在系统代理下切为全局，仍只有使用系统代理的应用会被接管。</p>
+    <p><strong>规则分流。</strong> Hiddify 导入订阅后，需要单独导入一次分流规则。规则开启后，配置的直连域名及其全部子域名、局域网和中国大陆流量直连，其余流量走代理。</p>
     <p class="guide-links"><a href="HIDDIFY_RULE_LINK_PLACEHOLDER">在 Hiddify 中导入分流规则</a><a href="/hiddify-routing.json" download>下载规则文件</a></p>
     <p>如果链接没有打开 App，下载文件后，在 Hiddify 的「设置 → 路由 → ⋯ → 从文件导入规则」中选择该文件，确认后断开并重连。导入会替换 App 里已有的自定义路由，已有自定义规则时可先导出保存。</p>
-    <p>导入后确认「Cheapcoding 直连」和「中国大陆直连」已开启。曾导入旧规则的用户，请重新导入新版。临时需要全局代理时，可在「路由」关闭直连规则，包括内置的地区和局域网直连，再重连；恢复分流时重新开启。</p>
+    <p>导入后确认「Cheapcoding 直连」和「中国大陆直连」已开启。曾导入旧规则的用户，请重新导入新版。</p>
+    <p><strong>全局代理。</strong> 如需让整台电脑被接管，先选 VPN（TUN）。在「设置 → 路由」临时关闭启用的直连规则，包括上述两条自定义规则，以及内置的地区、局域网和系统服务直连。若开启了「按应用路由」，也将其关闭，避免应用因名单设置被直连或排除。选好代理节点后断开并重连。要恢复分流，重新打开原先的规则即可。</p>
     <p class="guide-links"><a href="https://hiddify.com/app/How-to-install-Hiddify-app/">Hiddify 官方安装说明</a><a href="https://hiddify.com/app/How-to-use-Hiddify-app/">Hiddify 官方使用说明</a></p>
   </details>
   <details>
@@ -358,9 +366,9 @@ CLIENT_GUIDE = '''<details class="client-guide surface">
     </dl>
     <ol>
       <li>打开 FlClash，进入「配置」，点 <strong>＋</strong> →「链接」，粘贴订阅地址并导入。</li>
-      <li>选中刚添加的配置。安卓在「仪表盘」开启连接，电脑开启「系统代理」。</li>
+      <li>选中刚添加的配置。安卓在「仪表盘」开启连接。电脑上浏览器可用「系统代理」，需要接管更多桌面应用时开启「虚拟网卡（TUN）」，并按提示授权。</li>
       <li>在「代理」页的 <strong>美国-新泽西</strong> 分组中，选择 <strong>美国-新泽西 01</strong>。</li>
-      <li>「出站模式」默认是「规则」，按目的地分流。需要所有流量走代理时，切换到「全局」，再选 <strong>美国-新泽西 01</strong>。</li>
+      <li>「出站模式」默认是「规则」，按目的地分流。要让已接管的流量都走代理，切换到「全局」，再选 <strong>美国-新泽西 01</strong>。要接管其他桌面应用，还需开启 TUN。</li>
     </ol>
   </details>
   <details>
@@ -369,6 +377,17 @@ CLIENT_GUIDE = '''<details class="client-guide surface">
       <dt>续费后怎么更新？</dt><dd>Hiddify 在首页配置卡片上点刷新；FlClash 在「配置」页更新当前订阅。最新到期时间可在本页查看。</dd>
       <dt>导入失败怎么办？</dt><dd>重新复制本页的完整订阅地址，确认它以 <code>https://</code> 开头且包含 <code>/sub/</code>，并检查订阅状态。</dd>
       <dt>连接后没有效果？</dt><dd>确认已选中刚导入的配置。如果 WireGuard 或其他 VPN 正在运行，先断开，再连接当前客户端。</dd>
+      <dt>Windows 的 Hiddify 启动 VPN 时提示 <code>set ipv6 address: Element not found</code>？</dt>
+      <dd>
+        <p>这个错误发生在 Hiddify 给本机 TUN 虚拟网卡配置 IPv6 地址时。可用同一个订阅临时切到「系统代理」，在浏览器打开一个会走代理的网站。如果可以打开，说明该订阅的节点可用，可继续排查本机 VPN 启动。</p>
+        <ol>
+          <li>断开 WireGuard 或 Clash 等其他隧道，退出其他代理客户端。从系统托盘彻底退出 Hiddify，再以管理员身份打开，选择 VPN 重试。</li>
+          <li>如果「设置 → 路由 → IPv6 路由」已开启，先在 Hiddify 内把它设为「关闭」并重连。这是客户端内的排查项，有些版本即使关闭也可能尝试配置虚拟网卡的 IPv6 地址。</li>
+          <li>如果仍报错，检查 Windows 是否通过系统设置或策略禁用了 IPv6。命令提示符中可运行下面的只读命令，将结果和 Hiddify 日志中的报错行发给支持人员。<a href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/configure-ipv6-in-windows">查看微软的 IPv6 配置说明</a>。</li>
+        </ol>
+        <p><code>reg query "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters" /v DisabledComponents</code></p>
+        <p>排查期间，浏览器可以临时使用「系统代理」。需要让桌面软件也走代理，可用上面的 FlClash 导入同一订阅并尝试「虚拟网卡（TUN）」。</p>
+      </dd>
     </dl>
   </details>
 </details>'''.replace('HIDDIFY_RULE_LINK_PLACEHOLDER', html.escape(HIDDIFY_RULE_LINK, quote=True))
