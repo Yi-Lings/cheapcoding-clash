@@ -74,7 +74,8 @@ done
 python3 - "$testdir/secrets/admin-credentials" <<'PY'
 from pathlib import Path
 from urllib.error import HTTPError
-from urllib.request import Request, urlopen
+from urllib.parse import urlencode, urlsplit
+from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
 import json
 import re
 import sys
@@ -125,6 +126,89 @@ except HTTPError as exc:
 else:
     raise AssertionError('Unauthenticated accounts JSON was accessible')
 print('PASS account picker filtering and authenticated live refresh')
+
+
+class NoRedirect(HTTPRedirectHandler):
+    def redirect_request(self, *args, **kwargs):
+        return None
+
+
+def request(url, expected, *, cookie='', form=None):
+    headers = {'Cookie': cookie} if cookie else {}
+    data = urlencode(form).encode() if form is not None else None
+    try:
+        response = build_opener(NoRedirect()).open(Request(url, data, headers), timeout=8)
+    except HTTPError as error:
+        response = error
+    with response:
+        assert response.code == expected, (urlsplit(url).path.split('/')[1], response.code, expected)
+        return response.read(), response.headers
+
+
+def form_cookie(headers):
+    return next(item.split(';', 1)[0] for item in headers.get_all('Set-Cookie', [])
+                if item.startswith(portal.FORM_COOKIE + '='))
+
+
+def form_token(form_cookie):
+    return form_cookie.split('=', 1)[1]
+
+
+def password_form(form_cookie, password):
+    return {'password': password, 'confirmation': password, '_form_token': form_token(form_cookie)}
+
+
+admin_cookie = cookie.split(';', 1)[0]
+panel_id = account['panel_id']
+editor = admin + '?client=' + str(panel_id)
+old_activation = base + '/account/' + account['access_key']
+subscription_url = base + '/sub/' + account['subscription']
+user_cookie = form_cookie(request(old_activation, 200)[1])
+old_password = 'initial-smoke-password'
+_, response = request(old_activation, 303, cookie=user_cookie, form=password_form(user_cookie, old_password))
+old_session = response['Set-Cookie'].split(';', 1)[0]
+assert response['Location'] == '/dashboard'
+request(base + '/dashboard', 200, cookie=old_session)
+
+with portal.portal_traffic.database(portal.STATE) as db:
+    db.execute('insert into daily values(?,?,?,?)', ('2026-01-01', panel_id, 120, 340))
+before_node = portal.client('smoke-user')
+old_yaml, old_headers = request(subscription_url, 200)
+editor_body, response = request(editor, 200, cookie=admin_cookie)
+admin_form = form_cookie(response)
+revision = re.search(rb'name="action" value="reset_password".*?name="revision" value="([a-f0-9]+)"',
+                     editor_body)[1].decode()
+assert b'id="password-reset-url"' not in editor_body
+reset = {'action': 'reset_password', 'client_id': panel_id, 'revision': revision,
+         'confirm': 'yes', '_form_token': form_token(admin_form)}
+request(admin, 303, cookie=admin_form, form=reset)
+request(admin, 400, cookie=admin_cookie + '; ' + admin_form, form={key: value for key, value in reset.items()
+                                                                 if key != 'confirm'})
+_, response = request(admin, 303, cookie=admin_cookie + '; ' + admin_form, form=reset)
+assert response['Location'] == '/admin/operations/?client=' + str(panel_id)
+request(admin, 400, cookie=admin_cookie + '; ' + admin_form, form=reset)
+editor_body, _ = request(editor, 200, cookie=admin_cookie)
+new_key = re.search(rb'id="password-reset-url"[^>]+value="[^"]*/account/([a-f0-9]+)"', editor_body)[1].decode()
+assert new_key != account['access_key']
+request(old_activation, 404)
+assert request(base + '/dashboard', 303, cookie=old_session)[1]['Location'] == '/login'
+login_url = base + '/login'
+login_form = {'username': 'smoke-user', 'password': old_password, '_form_token': form_token(user_cookie)}
+request(login_url, 401, cookie=user_cookie, form=login_form)
+new_activation = base + '/account/' + new_key
+new_password = 'replacement-smoke-password'
+request(new_activation, 303, cookie=user_cookie, form=password_form(user_cookie, new_password))
+assert request(new_activation, 303)[1]['Location'] == '/login'
+assert request(login_url, 303, cookie=user_cookie, form=dict(login_form, password=new_password))[1]['Location'] == '/dashboard'
+new_yaml, new_headers = request(subscription_url, 200)
+assert new_yaml == old_yaml and new_headers['Subscription-Userinfo'] == old_headers['Subscription-Userinfo']
+after_node = portal.client('smoke-user')
+for field in ('id', 'uuid', 'subId', 'expiryTime', 'enable', 'totalGB'):
+    assert before_node[field] == after_node[field], field
+with portal.portal_traffic.database(portal.STATE) as db:
+    assert tuple(db.execute('select up, down from daily where day=? and client_id=?',
+                            ('2026-01-01', panel_id)).fetchone()) == (120, 340)
+print('PASS password reset links, admin confirmation, old session and password revocation, subscription and traffic retention')
 PY
 ss -ltnH 'sport = :17763' | grep -F '127.0.0.1:17763'
 if command -v nginx >/dev/null && command -v openssl >/dev/null; then

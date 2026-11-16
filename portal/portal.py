@@ -471,16 +471,21 @@ def password_hash(password, salt):
         return hashlib.scrypt(password.encode(), salt=salt, n=32768, r=8, p=1, maxmem=64 * 1024 * 1024).hex()
 
 
-def authenticate(name, password):
+def authenticate(name, password, existing=None):
     if not USERNAME.fullmatch(name) or len(password) > 128:
         return None
     with database() as db:
         row = db.execute('select * from credentials where name=?', (name,)).fetchone()
     salt = bytes.fromhex(row['salt']) if row else DUMMY_SALT
     calculated = password_hash(password, salt)
-    if row and secrets.compare_digest(calculated, row['password_hash']):
-        return name
-    return None
+    if not row or not secrets.compare_digest(calculated, row['password_hash']):
+        return None
+    with database() as db:
+        db.execute('begin immediate')
+        current = db.execute('select salt from credentials where name=?', (name,)).fetchone()
+        if not current or current['salt'] != row['salt']:
+            return None
+        return start_session(db, name, existing)
 
 
 def change_password(name, session_token, form):
@@ -516,12 +521,11 @@ def change_password(name, session_token, form):
     return fresh
 
 
-def start_session(name, existing=None):
+def start_session(db, name, existing=None):
     token = secrets.token_hex(32)
     now = int(time.time())
-    with database() as db:
-        db.execute('delete from sessions where expires<=? or token=?', (now, digest(existing or '')))
-        db.execute('insert into sessions values(?,?,?)', (digest(token), name, now + SESSION_SECONDS))
+    db.execute('delete from sessions where expires<=? or token=?', (now, digest(existing or '')))
+    db.execute('insert into sessions values(?,?,?)', (digest(token), name, now + SESSION_SECONDS))
     return token
 
 
@@ -1046,7 +1050,30 @@ def editor_select(label, field, choices, selected):
     return f'<label>{label}<select name="{field}">{options}</select></label>'
 
 
-def client_editor_page(current, message=''):
+def account_login_state(db, panel_id):
+    return db.execute('select a.name, a.access_key, c.salt from accounts a '
+                      'left join credentials c on c.name=a.name where a.panel_id=?', (panel_id,)).fetchone()
+
+
+def password_reset_revision(account):
+    return digest(account['access_key'] + ':' + (account['salt'] or ''))
+
+
+def reset_portal_password(panel_id, form):
+    if form.get('confirm') != 'yes':
+        raise PortalError('请勾选确认选项后再生成改密链接。')
+    with database() as db:
+        db.execute('begin immediate')
+        account = account_login_state(db, panel_id)
+        if not account or not secrets.compare_digest(password_reset_revision(account), form.get('revision', '')):
+            raise PortalError('账号的登录状态已更新，请核对后重新操作。')
+        name = account['name']
+        db.execute('update accounts set access_key=? where panel_id=?', (secrets.token_hex(28), panel_id))
+        db.execute('delete from credentials where name=?', (name,))
+        db.execute('delete from sessions where name=?', (name,))
+
+
+def client_editor_page(current, account, message=''):
     expiry = current['expiryTime']
     expiry_mode = 'fixed' if expiry > 0 else 'delayed' if expiry < 0 else 'unlimited'
     date_value = (dt.datetime.fromtimestamp(expiry / 1000, TZ).isoformat(timespec='milliseconds')[:-6]
@@ -1084,6 +1111,20 @@ def client_editor_page(current, message=''):
     primary_rows = ''.join('<div class="field-row">' + left + right + '</div>' for left, right in fields)
     advanced_rows = ''.join('<div class="field-row">' + left + right + '</div>' for left, right in advanced)
     name = html.escape(current['email'])
+    reset_section = ''
+    if account:
+        link = (copy_field('激活／改密链接', HOME + '/account/' + account['access_key'], 'password-reset-url')
+                if account['salt'] is None else '')
+        reset_section = (
+            '<details class="surface"' + (' open' if link else '') + '><summary>重置登录密码</summary>' +
+            ('<p>账号等待设置密码。请复制链接并单独发给用户，用户打开即可设置密码。</p>' + link
+             if link else '<p>生成链接后，旧密码和已有网页登录会话立即失效。请把新链接单独发给用户。</p>') +
+            '<form method="post" action="/admin/operations/">'
+            '<input type="hidden" name="action" value="reset_password">'
+            f'<input type="hidden" name="client_id" value="{current["id"]}">'
+            f'<input type="hidden" name="revision" value="{password_reset_revision(account)}">'
+            '<label><input class="inline" type="checkbox" name="confirm" value="yes" required>确认重置登录密码</label>'
+            '<button class="secondary">生成新改密链接</button></form></details>')
     return portal_app(
         '编辑客户端',
         '<div class="client-editor">' + notice(message) +
@@ -1091,7 +1132,7 @@ def client_editor_page(current, message=''):
         common + '<input type="hidden" name="action" value="edit_client">' + primary_rows +
         '<details><summary>高级设置</summary>' + advanced_rows + '</details>'
         '<div class="actions"><button>保存到 3x-ui</button>'
-        '<a class="edit-link" href="/admin/operations/">返回账号列表</a></div></form></section>'
+        '<a class="edit-link" href="/admin/operations/">返回账号列表</a></div></form></section>' + reset_section +
         '<details class="surface"><summary>重置流量与删除</summary><div class="editor-ops">'
         '<form method="post" action="/admin/operations/">' + common +
         '<label><input class="inline" type="checkbox" name="confirm" value="yes" required>确认清零已用流量</label>'
@@ -1385,6 +1426,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
         try:
             form = self.form()
             action = form.get('action')
+            if action == 'reset_password' and section == 'accounts':
+                panel_id = int(form.get('client_id', '0'))
+                try:
+                    find_panel_client(sync_accounts(), panel_id)
+                    reset_portal_password(panel_id, form)
+                except PortalError as exc:
+                    self.show_client_editor(panel_id, str(exc), 400)
+                    return
+                self.redirect('/admin/operations/?client=' + str(panel_id))
+                return
             if action == 'voucher':
                 if section != 'vouchers':
                     raise PortalError('请在兑换码页面提交。')
@@ -1427,15 +1478,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return
             elif action in ('extend', 'pause', 'resume'):
                 message = change_service(name, action, int(form.get('months', '0')) if action == 'extend' else 0)
-            elif action == 'reset' and form.get('confirm') == 'yes':
-                key = secrets.token_hex(28)
-                with database() as db:
-                    updated = db.execute('update accounts set access_key=? where name=?', (key, name))
-                    if updated.rowcount != 1:
-                        raise PortalError('账号不存在。')
-                    db.execute('delete from credentials where name=?', (name,))
-                    db.execute('delete from sessions where name=?', (name,))
-                message = name + ' 的新激活链接：' + HOME + '/account/' + key
             else:
                 raise PortalError('操作无效。')
             self.send(200, portal_admin_page(message, panel_id=account_filter_id(query)))
@@ -1449,7 +1491,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
         except PortalError as exc:
             self.send(404, portal_admin_page(str(exc)))
             return
-        self.send(status, client_editor_page(current, message))
+        with database() as db:
+            account = account_login_state(db, panel_id)
+        self.send(status, client_editor_page(current, account, message))
 
     def dispatch(self):
         path = urllib.parse.urlsplit(self.path).path
@@ -1513,11 +1557,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
                         self.send(401, login_page('请输入密码和动态验证码。' if two_factor else '用户名或密码错误。',
                                                   username, two_factor))
                     return
-                name = authenticate(username, password)
-                if not name:
+                fresh = authenticate(username, password, token)
+                if not fresh:
                     self.send(401, login_page('用户名或密码错误。首次使用请先设置密码。'))
                     return
-                self.redirect('/dashboard', cookie_header(start_session(name, token), SESSION_SECONDS))
+                self.redirect('/dashboard', cookie_header(fresh, SESSION_SECONDS))
                 return
             if not name:
                 self.redirect('/login')
@@ -1607,11 +1651,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     return
                 inserted = db.execute('insert or ignore into credentials values(?,?,?)',
                                       (account['name'], salt.hex(), hashed))
-                activated = inserted.rowcount == 1
-            if not activated:
+                fresh = start_session(db, account['name']) if inserted.rowcount == 1 else None
+            if not fresh:
                 self.redirect('/login')
                 return
-            self.redirect('/dashboard', cookie_header(start_session(account['name']), SESSION_SECONDS))
+            self.redirect('/dashboard', cookie_header(fresh, SESSION_SECONDS))
             return
         if self.command == 'POST':
             self.send(405, '')
